@@ -1,9 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const updatePackageJson = () => {
+const updatePackageJson = fileName => {
   try {
-    let packageJson = require("./package.json");
+    let packageJson = require(path.resolve(__dirname, fileName));
     const rnpm = {
       assets: ["Sources/Assets/Fonts"]
     };
@@ -14,6 +14,8 @@ const updatePackageJson = () => {
     packageJson.scripts.iosD = "react-native run-ios --device";
     packageJson.scripts.iosE = "react-native run-ios";
     packageJson = Object.assign(packageJson, { rnpm });
+    writeFile(fileName, JSON.stringify(packageJson, null, 2));
+    console.log("update package json success");
   } catch (e) {
     console.log("update package json error: ", e);
   }
@@ -58,7 +60,7 @@ const moveFile = (oldPath, newPath) => {
 };
 
 console.log("🔄 Setting up...");
-updatePackageJson();
+
 deleteFile(".flowconfig");
 deleteFile("App.js");
 deleteFile("setup.js");
@@ -66,5 +68,7 @@ moveFile(
   path.join(__dirname, "app.json"),
   path.join(__dirname, "Sources/App/app.json")
 );
+
+updatePackageJson("package.json");
 
 console.log(`✅ Setup completed!`);
