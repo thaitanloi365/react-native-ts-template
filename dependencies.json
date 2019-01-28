@@ -1,6 +1,7 @@
 {
   "axios": "latest",
   "react-navigation": "latest",
+  "react-native-gesture-handler": "lastest",
   "react-redux": "latest",
   "redux-persist": "latest",
   "redux-thunk": "latest"
