@@ -4,5 +4,6 @@
   "@types/react-native": "latest",
   "@types/react-test-renderer": "latest",
   "@types/react": "latest",
-  "typescript": "latest"
+  "typescript": "latest",
+  "babel-plugin-module-resolver": "latest"
 }
