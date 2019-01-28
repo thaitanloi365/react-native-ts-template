@@ -1,5 +1,8 @@
 import React from "React";
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import { Start } from "Screens";
+import AuthenticationStack from "../Stack/AuthenticationStack";
+import HomeStack from "../Stack/HomeStack";
 
 const RootStack = createStackNavigator(
   {

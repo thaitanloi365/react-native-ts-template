@@ -16,7 +16,8 @@ module.exports = {
           Screens: "./Sources/Screens",
           Services: "./Sources/Services",
           Types: "./Sources/Types",
-          Utils: "./Sources/Utils"
+          Utils: "./Sources/Utils",
+          Styles: "./Sourecs/Styles"
         }
       }
     ]

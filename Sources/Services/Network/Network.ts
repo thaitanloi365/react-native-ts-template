@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosPromise } from "axios";
+import axios, { AxiosPromise } from "axios";
 
 const BASE_URL = "http://cms.jelly.city";
 
@@ -49,32 +49,14 @@ class Network {
     });
     return response;
   }
-  // unAuthorizedRequest = (
-  //   url: string,
-  //   method: "POST" | "GET" = "GET",
-  //   data?: object,
-  //   header?: object
-  // ) =>
-  //   axios({
-  //     method: method,
-  //     url: url,
-  //     baseURL: BASE_URL,
-  //     data: data,
-  //     timeout: 10000,
-  //     headers: {
-  //       ...header,
-  //       "Content-Type": "application/json",
-  //       version: ""
-  //     }
-  //   });
 
-  authorizedRequest = (
+  authorizedRequest<T>(
     url: string,
     method: "POST" | "GET" = "GET",
     data?: object,
     header?: object
-  ) =>
-    axios({
+  ): AxiosPromise<T> {
+    const response: AxiosPromise<T> = axios({
       method: method,
       url: url,
       baseURL: BASE_URL,
@@ -87,6 +69,8 @@ class Network {
         "X-Token": this.token
       }
     });
+    return response;
+  }
 }
 
 export default Network.getInstance();

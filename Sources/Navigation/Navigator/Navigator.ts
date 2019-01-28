@@ -7,7 +7,8 @@ import {
   DrawerActions
 } from "react-navigation";
 
-type RouteName = "Start";
+type RouteName = "Start" | "Home" | "Authentication";
+
 type AnimationType = "slideFromLeft" | "slideFromBottom";
 type AnimationParams = { animationType?: AnimationType };
 type BottomTabbarProps = { tabBarVisible: boolean };
@@ -31,6 +32,7 @@ class Navigator {
 
   public setRoot = (rootNavigator: NavigationContainer | null) => {
     if (this.rootNavigator) return;
+    console.log("root", rootNavigator);
     this.rootNavigator = rootNavigator;
   };
 

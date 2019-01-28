@@ -1,5 +1,6 @@
 {
   "babel-plugin-transform-remove-console": "latest",
+  "babel-plugin-module-resolver": "latest",
   "@types/jest": "latest",
   "@types/react-native": "latest",
   "@types/react-test-renderer": "latest",
@@ -10,5 +11,5 @@
   "@types/redux-persist": "latest",
   "@types/redux-thunk": "latest",
   "typescript": "latest",
-  "babel-plugin-module-resolver": "latest"
+  "redux-logger": "latest"
 }

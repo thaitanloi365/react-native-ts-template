@@ -3,7 +3,6 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "isolatedModules": true,
     "jsx": "react-native",
     "lib": ["es6"],
     "moduleResolution": "node",
@@ -22,7 +21,8 @@
       "Screens": ["Sources/Screens"],
       "Services": ["Sources/Services"],
       "Types": ["Sources/Types"],
-      "Utils": ["Sources/Utils"]
+      "Utils": ["Sources/Utils"],
+      "Styles": ["Sourecs/Styles"]
     }
   },
   "exclude": ["node_modules"]

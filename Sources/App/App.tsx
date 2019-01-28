@@ -1,31 +1,30 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { configStore } from "./Store";
-import { AppContainer } from "../RootNavigation/RootNavigation";
-import { SplashScreen, NetInfo, Loading, Alert } from "../Components";
-import { Navigation } from "../Services";
+import { configStore } from "Redux";
+import { Navigator, AppContainer } from "Navigation";
+import { SplashScreen, NetInfo, Loading, Alert } from "Components";
 
 const { store, persistor } = configStore();
 
 export default class App extends React.Component {
-  private loading: Loading | null = null;
-  private alert: Alert | null = null;
-
+  private loadingRef = React.createRef<Loading>();
+  private alertRef = React.createRef<Alert>();
   showLoading = () => {
-    if (this.loading) this.loading.show();
+    if (this.loadingRef.current) this.loadingRef.current.show();
   };
 
   hideLoading = (onClose?: () => void) => {
-    if (this.loading) this.loading.hide(onClose);
+    if (this.loadingRef.current) this.loadingRef.current.hide(onClose);
   };
 
   alertShow = (msg: string, onClose?: () => void) => {
-    if (this.alert) this.alert.show(msg, onClose);
+    if (this.alertRef.current) this.alertRef.current.show(msg, onClose);
   };
 
   alertConfirm = (msg: string, onOk?: () => void, onCancel?: () => void) => {
-    if (this.alert) this.alert.confirm(msg, onOk, onCancel);
+    if (this.alertRef.current)
+      this.alertRef.current.confirm(msg, onOk, onCancel);
   };
 
   render() {
@@ -35,7 +34,7 @@ export default class App extends React.Component {
           <NetInfo />
           <AppContainer
             ref={r => {
-              Navigation.setRoot(r);
+              Navigator.setRoot(r);
             }}
             screenProps={{
               showLoading: this.showLoading,
@@ -44,16 +43,8 @@ export default class App extends React.Component {
               alertConfirm: this.alertConfirm
             }}
           />
-          <Loading
-            ref={r => {
-              this.loading = r;
-            }}
-          />
-          <Alert
-            ref={r => {
-              this.alert = r;
-            }}
-          />
+          <Loading ref={this.loadingRef} />
+          <Alert ref={this.alertRef} />
         </PersistGate>
       </Provider>
     );
