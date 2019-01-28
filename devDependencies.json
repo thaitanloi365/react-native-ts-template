@@ -1,0 +1,8 @@
+{
+  "babel-plugin-transform-remove-console": "latest",
+  "@types/jest": "latest",
+  "@types/react-native": "latest",
+  "@types/react-test-renderer": "latest",
+  "@types/react": "latest",
+  "typescript": "latest"
+}
