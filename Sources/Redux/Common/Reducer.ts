@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 
-import UserStorageReducer from "../Services/UserStorage/UserStorageReducer";
+import UserStorageReducer from "../UserStorage/UserStorageReducer";
 
 export const initialState = {
   userStorage: UserStorageReducer.initialState

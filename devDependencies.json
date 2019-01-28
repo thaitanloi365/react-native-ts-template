@@ -4,6 +4,11 @@
   "@types/react-native": "latest",
   "@types/react-test-renderer": "latest",
   "@types/react": "latest",
+  "@types/react-navigation": "latest",
+  "@types/redux": "latest",
+  "@types/react-redux": "latest",
+  "@types/redux-persist": "latest",
+  "@types/redux-thunk": "latest",
   "typescript": "latest",
   "babel-plugin-module-resolver": "latest"
 }
