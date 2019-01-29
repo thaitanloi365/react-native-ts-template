@@ -12,7 +12,7 @@ module.exports = {
           Localization: "./Sources/Localization",
           Models: "./Sources/Models",
           Navigation: "./Sources/Navigation",
-          Redux: "./Sources/Redux",
+          ReduxManager: "./Sources/ReduxManager",
           Screens: "./Sources/Screens",
           Services: "./Sources/Services",
           Types: "./Sources/Types",
