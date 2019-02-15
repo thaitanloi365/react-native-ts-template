@@ -31,7 +31,6 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <PersistGate loading={<SplashScreen />} persistor={persistor}>
-          <NetInfo />
           <AppContainer
             ref={r => {
               Navigator.setRoot(r);
@@ -45,6 +44,7 @@ export default class App extends React.Component {
           />
           <Loading ref={this.loadingRef} />
           <Alert ref={this.alertRef} />
+          <NetInfo />
         </PersistGate>
       </Provider>
     );

@@ -30,16 +30,22 @@ function ifIphoneX(iphoneXStyle: number, regularStyle: number) {
   return regularStyle;
 }
 
-function getStatusBarHeight(safe?: boolean, translucent?: boolean) {
+function getStatusBarHeight(safe?: boolean) {
   return Platform.select({
     ios: ifIphoneX(safe ? 44 : 30, 20),
-    android: translucent ? 0 : StatusBar.currentHeight
+    android: StatusBar.currentHeight
   });
+}
+
+function getHeaderHeight() {
+  const headerHeight = Platform.OS == "android" ? 56 : 44;
+  return headerHeight;
 }
 
 export default {
   getScreenSize,
   isAndroid,
   version,
-  getStatusBarHeight
+  getStatusBarHeight,
+  getHeaderHeight
 };

@@ -1,40 +1,48 @@
-import * as types from "./UserStorageActionTypes";
+import { Action } from "redux";
+import { IAction, ActionTypes } from "./UserStorageActionTypes";
 
-const saveUserToken = <T extends {}>(userToken: T) => ({
-  type: types.SAVE_USER_TOKEN,
-  payload: userToken
-});
 
-const deleteUserToken = () => ({
-  type: types.DELETE_USER_TOKEN
-});
 
-const saveUserProfile = <T extends {}>(userProfile: T) => ({
-  type: types.SAVE_USER_PROFILE,
-  payload: userProfile
-});
+function saveUserToken<T>(userToken: T): IAction<T> {
+  return {
+    type: ActionTypes.SAVE_USER_TOKEN,
+    payload: userToken
+  };
+}
 
-const deleteUserProfile = () => ({
-  type: types.DELETE_USER_PROFILE
-});
+function deleteUserToken(): Action {
+  return { type: ActionTypes.DELETE_USER_TOKEN };
+}
 
-const saveUserDatabase = <T extends {}>(userDatabase: T) => ({
-  type: types.SAVE_USER_DATABASE,
-  payload: userDatabase
-});
+function saveUserProfile<T>(userProfile: T): IAction<T> {
+  return {
+    type: ActionTypes.SAVE_USER_PROFILE,
+    payload: userProfile
+  };
+}
 
-const deleteUserDatabase = () => ({
-  type: types.DELETE_USER_DATABASE
-});
+function deleteUserProfile(): Action {
+  return { type: ActionTypes.DELETE_USER_PROFILE };
+}
 
-const deleteAll = () => ({
-  type: types.DELETE_ALL
-});
+function saveUserDatabase<T>(userDatabase: T): IAction<T> {
+  return { type: ActionTypes.SAVE_USER_DATABASE, payload: userDatabase };
+}
 
-const saveAll = <T extends {}>(data: T) => ({
-  type: types.SAVE_ALL,
-  payload: data
-});
+function deleteUserDatabase(): Action {
+  return { type: ActionTypes.DELETE_USER_DATABASE };
+}
+
+function deleteAll(): Action {
+  return { type: ActionTypes.DELETE_ALL };
+}
+
+function saveAll<T>(data: T): IAction<T> {
+  return {
+    type: ActionTypes.SAVE_ALL,
+    payload: data
+  };
+}
 
 export default {
   saveUserToken,

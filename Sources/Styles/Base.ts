@@ -20,21 +20,6 @@ const baseStyles = {
     backgroundColor: "black",
     fontSize: 16,
     fontFamily: Assets.fontFamily.roman
-  },
-  hint: {
-    backgroundColor: Assets.colors.black,
-    fontSize: 12,
-    fontFamily: Assets.fontFamily.roman
-  },
-  textNormal: {
-    backgroundColor: Assets.colors.darkSkyBlue,
-    fontSize: 16,
-    fontFamily: Assets.fontFamily.medium
-  },
-  textDanger: {
-    backgroundColor: Assets.colors.grapefruit,
-    fontSize: 16,
-    fontFamily: Assets.fontFamily.medium
   }
 };
 

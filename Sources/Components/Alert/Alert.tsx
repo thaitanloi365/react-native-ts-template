@@ -1,15 +1,18 @@
-import React from "react";
-import { Overlay, Text, Button } from "Components";
-import { View, StyleSheet, Platform, Keyboard } from "react-native";
+import React, { createRef } from "react";
+import { View, StyleSheet, Platform, Keyboard, Animated } from "react-native";
 import { AlertProps } from "Types";
 import Assets from "Assets";
+import Overlay from "../Overlay/Overlay";
+import Text from "../Text/Text";
+import Button from "../Button/Button";
+import Modal from "../Modal/Modal";
 
 type Props = AlertProps;
 
 type State = {
-  visible: boolean;
   content: string;
   confirm: boolean;
+  animatedValue: Animated.Value;
 };
 
 class Alert extends React.Component<Props, State> {
@@ -17,82 +20,132 @@ class Alert extends React.Component<Props, State> {
   private onOk?: () => void;
   private onCancel?: () => void;
 
+  private overlayRef = React.createRef<Overlay>();
+
   static defaultProps: Props = {
     positiveButtonText: "OK",
-    negativeButtonText: "Cancel",
-    positiveButtonStyle: { flex: 1 },
-    negativeButtonStyle: { flex: 1 }
+    negativeButtonText: "Cancel"
   };
   constructor(props: Props) {
     super(props);
     this.state = {
-      visible: false,
       content: "Are you sure?",
-      confirm: false
+      confirm: false,
+      animatedValue: new Animated.Value(0)
     };
   }
 
   show = (msg: string, onClose?: () => void) => {
     Keyboard.dismiss();
-    this.setState({ visible: true, content: msg, confirm: false }, () => {
-      this.onClose = onClose;
+    this.setState({ content: msg, confirm: false }, () => {
+      if (this.overlayRef.current) {
+        this.overlayRef.current.show(() => {
+          this.onClose = onClose;
+          console.log("on show done");
+          Animated.timing(this.state.animatedValue, {
+            toValue: 1,
+            useNativeDriver: true,
+            duration: 250
+          }).start();
+        });
+      }
     });
   };
 
   confirm = (msg: string, onOk?: () => void, onCancel?: () => void) => {
     Keyboard.dismiss();
-    this.setState({ visible: true, content: msg, confirm: true }, () => {
-      this.onOk = onOk;
-      this.onCancel = onCancel;
+    this.setState({ content: msg, confirm: true }, () => {
+      if (this.overlayRef.current) {
+        this.overlayRef.current.show(() => {
+          this.onOk = onOk;
+          this.onCancel = onCancel;
+          Animated.timing(this.state.animatedValue, {
+            toValue: 1,
+            useNativeDriver: true,
+            duration: 200
+          }).start();
+        });
+      }
     });
   };
 
+  private hide = (onHide?: () => void) => {
+    Animated.timing(this.state.animatedValue, {
+      toValue: 0,
+      useNativeDriver: true,
+      duration: 200
+    }).start(onHide);
+  };
+
   private onOkPressed = () => {
-    this.setState({ visible: false }, () => {
-      if (this.state.confirm) {
-        if (this.onOk) this.onOk();
-      } else {
-        if (this.onClose) this.onClose();
+    this.hide(() => {
+      if (this.overlayRef.current) {
+        this.overlayRef.current.hide(() => {
+          if (this.state.confirm) {
+            if (this.onOk) this.onOk();
+          } else {
+            if (this.onClose) this.onClose();
+          }
+        });
       }
     });
   };
 
   private onCancelPressed = () => {
-    this.setState({ visible: false }, () => {
-      if (this.onCancel) this.onCancel();
+    this.hide(() => {
+      if (this.overlayRef.current) {
+        this.overlayRef.current.hide(() => {
+          if (this.onCancel) this.onCancel();
+        });
+      }
     });
   };
 
   render() {
-    const { visible, content, confirm } = this.state;
+    const { content, confirm, animatedValue } = this.state;
     const {
       positiveButtonText,
       positiveButtonStyle,
       negativeButtonStyle,
       negativeButtonText
     } = this.props;
+
+    const scale = animatedValue.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: [0, 0.7, 1],
+      extrapolate: "clamp"
+    });
+    const animationStyle = {
+      opacity: animatedValue,
+      transform: [{ scale }]
+    };
+
     return (
-      <Overlay visible={visible}>
-        <View style={styles.container}>
+      <Overlay ref={this.overlayRef} animated>
+        <Animated.View style={[styles.container, animationStyle]}>
           <Text style={styles.content} text={content} />
-          <View style={styles.seperator} />
-          <View style={styles.buttonContainer}>
+          <View
+            style={[
+              styles.buttonContainer,
+              { justifyContent: confirm ? "space-around" : "center" }
+            ]}
+          >
             <Button
               onPress={this.onOkPressed}
-              style={positiveButtonStyle}
+              style={[styles.okButton, positiveButtonStyle]}
               text={positiveButtonText}
-              textStyle={styles.okButton}
+              textStyle={styles.okButtonText}
             />
             {confirm && (
               <Button
                 onPress={this.onCancelPressed}
-                style={negativeButtonStyle}
+                style={[styles.cancelButton, negativeButtonStyle]}
                 text={negativeButtonText}
-                textStyle={styles.cancelButton}
+                textStyle={styles.cancelButtonText}
               />
             )}
           </View>
-        </View>
+        </Animated.View>
       </Overlay>
     );
   }
@@ -107,40 +160,55 @@ const styles = StyleSheet.create({
       },
       ios: {
         shadowColor: "#000000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 9
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.2,
+        shadowRadius: 6
       }
     }),
-    borderRadius: 14
+    borderRadius: 14,
+    maxWidth: "90%"
   },
   content: {
-    paddingTop: 16,
-    paddingHorizontal: 30,
-    fontSize: 13,
+    marginTop: 16,
+    marginHorizontal: 30,
+    marginBottom: 37,
+    fontSize: 18,
     fontFamily: Assets.fontFamily.medium,
-    textAlign: "center"
-  },
-  seperator: {
-    borderBottomColor: Assets.colors.silver,
-    borderBottomWidth: 1,
-    marginTop: 12
+    textAlign: "center",
+    color: Assets.colors.slate
   },
   buttonContainer: {
-    paddingVertical: 8,
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "stretch"
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10
   },
   okButton: {
+    marginHorizontal: 20,
+    height: 46,
+    width: 112,
+    borderRadius: 23,
+    padding: 0,
+    backgroundColor: Assets.colors.primary
+  },
+  okButtonText: {
     fontSize: 18,
     fontFamily: Assets.fontFamily.medium,
-    color: Assets.colors.lightblue
+    color: "white",
+    textAlign: "center"
   },
   cancelButton: {
+    marginHorizontal: 20,
+    height: 46,
+    width: 112,
+    borderRadius: 23,
+    padding: 0,
+    backgroundColor: Assets.colors.blueGrey
+  },
+  cancelButtonText: {
     fontSize: 18,
     fontFamily: Assets.fontFamily.medium,
-    color: Assets.colors.cherryRed
+    color: "white"
   }
 });
 

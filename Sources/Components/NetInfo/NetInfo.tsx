@@ -1,20 +1,13 @@
 import React from "react";
 import { NetInfo as RNNetInfo, Platform } from "react-native";
-import { Toast } from "Components";
+import Toast from "../Toast/Toast";
 
 type Props = {};
-type State = {
-  isConnected: boolean;
-};
+type State = {};
 
 class NetInfo extends React.Component<Props, State> {
   private toastRef = React.createRef<Toast>();
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      isConnected: true
-    };
-  }
+
   componentDidMount() {
     RNNetInfo.isConnected.addEventListener(
       "connectionChange",
@@ -35,7 +28,7 @@ class NetInfo extends React.Component<Props, State> {
   }
 
   private handleConnectionChange = (isConnected: boolean) => {
-    this.setState({ isConnected });
+    console.log("handleConnectionChange", isConnected);
     if (this.toastRef.current) {
       if (isConnected) {
         this.toastRef.current.hide();

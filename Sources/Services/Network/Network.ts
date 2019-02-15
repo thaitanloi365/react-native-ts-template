@@ -1,4 +1,8 @@
 import axios, { AxiosPromise } from "axios";
+export const ERROR_CODE_SUCCESS = 200;
+export const ERROR_CODE_NOT_FOUND = 404;
+export const ERROR_CODE_INVALID_REQUEST = 422;
+export const ERROR_CODE_SERVER = 500;
 
 const BASE_URL = "http://cms.jelly.city";
 
@@ -45,6 +49,9 @@ class Network {
         ...header,
         "Content-Type": "application/json",
         version: ""
+      },
+      validateStatus: function(status) {
+        return status == ERROR_CODE_SUCCESS;
       }
     });
     return response;

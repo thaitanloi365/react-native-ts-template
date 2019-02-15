@@ -1,38 +1,44 @@
-import * as types from "./UserStorageActionTypes";
+import { ActionTypes } from "./UserStorageActionTypes";
 import { AsyncStorage } from "react-native";
 import { persistReducer } from "redux-persist";
+import { UserToken, UserProfile, UserDatabase } from "Models";
+import { Action } from "redux";
 
-const initialState: object = {
-  userToken: null,
-  userProfile: null,
-  userDatabase: null
+type State = {
+  userToken?: UserToken;
+  userProfle?: UserProfile;
+  userDatabase?: UserDatabase;
 };
+
+const initialState: State = {};
 
 const userStorageReducer = (
   state: object = initialState,
-  action: { type: types.ACTION_TYPE; payload: object }
+  action: {
+    type: keyof typeof ActionTypes;
+    payload?: UserToken | UserProfile | UserDatabase | State;
+  }
 ) => {
   switch (action.type) {
-    case types.SAVE_USER_TOKEN:
+    case ActionTypes.SAVE_USER_TOKEN:
       return { ...state, userToken: action.payload };
-    case types.DELETE_USER_TOKEN:
+    case ActionTypes.DELETE_USER_TOKEN:
       return { ...state, userToken: null, userProfile: null };
-    case types.SAVE_USER_PROFILE:
+    case ActionTypes.SAVE_USER_PROFILE:
       return { ...state, userProfile: action.payload };
-    case types.DELETE_USER_PROFILE:
+    case ActionTypes.DELETE_USER_PROFILE:
       return { ...state, userProfile: null };
-    case types.SAVE_USER_DATABASE:
+    case ActionTypes.SAVE_USER_DATABASE:
       return { ...state, userDatabase: action.payload };
-    case types.DELETE_USER_DATABASE:
+    case ActionTypes.DELETE_USER_DATABASE:
       return { ...state, userDatabase: null };
-    case types.DELETE_ALL:
+    case ActionTypes.DELETE_ALL:
       return {
-        ...state,
         userDatabase: null,
         userProfile: null,
         userToken: null
       };
-    case types.SAVE_ALL:
+    case ActionTypes.SAVE_ALL:
       return { ...state, ...action.payload };
     default:
       return state;

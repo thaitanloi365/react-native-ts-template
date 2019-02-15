@@ -1,80 +1,54 @@
 import React from "react";
-import {
-  Animated,
-  StyleSheet,
-  LayoutChangeEvent,
-  Platform
-} from "react-native";
-import { Text } from "Components";
+import { StyleSheet, Platform, View } from "react-native";
 import { ToastProps } from "Types";
-import { Device } from "Utils";
+import { Device, LayoutAnimations } from "Utils";
 import Assets from "Assets";
+import Text from "../Text/Text";
 
 type Props = ToastProps;
 type State = {
-  showing: boolean;
+  visible: boolean;
   height: number;
 };
 
 const statusBarHeight = Device.getStatusBarHeight(true);
 
 class Toast extends React.Component<Props, State> {
-  private animatedValue = new Animated.Value(0);
   static defaultProps: Props = {
-    backgroundColor: Assets.colors.cherryRed,
+    backgroundColor: Assets.colors.primary,
     text: "Network is not available"
   };
   constructor(props: Props) {
     super(props);
     this.state = {
-      showing: false,
+      visible: false,
       height: 0
     };
+    LayoutAnimations.enableAndroidLayoutAnimation();
   }
 
-  private onLayout = (event: LayoutChangeEvent) => {
-    if (this.state.height) return;
-    const height = statusBarHeight + event.nativeEvent.layout.height;
-    this.setState({ height });
-  };
-
   show = () => {
-    if (this.state.showing) return;
-    Animated.timing(this.animatedValue, {
-      toValue: 1,
-      duration: 1000
-    }).start(() => this.setState({ showing: true }));
+    LayoutAnimations.setLayoutAnimation(LayoutAnimations.PresetEaseInOut);
+    this.setState({ height: 60 });
+    console.log("show");
   };
 
   hide = () => {
-    if (!this.state.showing) return;
-    Animated.timing(this.animatedValue, {
-      toValue: 0,
-      duration: 1000
-    }).start(() => this.setState({ showing: false }));
+    LayoutAnimations.setLayoutAnimation(LayoutAnimations.PresetEaseInOut);
+    this.setState({ height: 0 });
+    console.log("hide");
   };
 
   render() {
     const { text, backgroundColor, textStyle } = this.props;
-    const heightTranslate = this.animatedValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, this.state.height]
-    });
-
+    const { height } = this.state;
+    console.log({ height });
     return (
-      <Animated.View
-        onLayout={this.onLayout}
-        style={[
-          styles.container,
-          {
-            backgroundColor,
-            height: heightTranslate,
-            opacity: this.animatedValue
-          }
-        ]}
-      >
-        <Text text={text} style={[styles.text, textStyle]} />
-      </Animated.View>
+      <View style={[styles.container, { height }]}>
+        <View style={[styles.textContainer, { backgroundColor }]}>
+          <Text text={text} style={[styles.text, textStyle]} />
+        </View>
+      </View>
     );
   }
 }
@@ -85,22 +59,20 @@ const styles = StyleSheet.create({
     top: statusBarHeight,
     left: 0,
     right: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 10,
-    opacity: 0,
+    height: 0,
     ...Platform.select({
       ios: {
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        zIndex: 3
+        zIndex: 4
       },
       android: {
-        elevation: 3
+        elevation: 4
       }
     })
+  },
+  textContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10
   },
   text: {
     fontSize: 15,

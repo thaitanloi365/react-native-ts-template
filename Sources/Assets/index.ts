@@ -1,21 +1,23 @@
 const images = {
-  splashScreen: require("./Images/splashScreen.png")
+  splashScreen: require("./Images/splashScreen.png"),
+  back: require("./Images/back.png")
 };
 
 const colors = {
-  lightblue: "#73d0f4",
-  white: "#ededed",
-  black: "#000000",
-  denim: "#3d6889",
-  greyishBrown: "#4a4a4a",
-  dark: "#1f202b",
-  cherryRed: "#e4032d",
-  darkishBlue: "#02498e",
-  azure: "#0db8ed",
-  veryLightPurple: "#fbdfe5",
-  grapefruit: "#ff5d5d",
-  darkSkyBlue: "#4a90e2",
-  silver: "#c3c3c4"
+  primary: "#5b8929",
+  primaryDark: "#429321",
+  secondary: "#7bbb49",
+  slate: "#474f61",
+  orange: "#f76e1e",
+  white: "#ffffff",
+  lightBlueGrey: "#dae4f2",
+  turtleGreen: "#7bbb49",
+  mossyGreen: "#5b8929",
+  treeGreen: "#429321",
+  warmBlue: "#3c5bd2",
+  brownishOrange: "#cc8529",
+  blueGrey: "#78849e",
+  oceanBlue: "#005db0"
 };
 
 const fontFamily = {
