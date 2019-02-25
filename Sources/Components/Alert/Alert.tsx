@@ -1,11 +1,19 @@
-import React, { createRef } from "react";
-import { View, StyleSheet, Platform, Keyboard, Animated } from "react-native";
+import React from "react";
+import {
+  View,
+  StyleSheet,
+  Platform,
+  Keyboard,
+  Animated,
+  Dimensions
+} from "react-native";
 import { AlertProps } from "Types";
 import Assets from "Assets";
 import Overlay from "../Overlay/Overlay";
 import Text from "../Text/Text";
 import Button from "../Button/Button";
-import Modal from "../Modal/Modal";
+
+const { width, height } = Dimensions.get("window");
 
 type Props = AlertProps;
 
@@ -24,8 +32,11 @@ class Alert extends React.Component<Props, State> {
 
   static defaultProps: Props = {
     positiveButtonText: "OK",
-    negativeButtonText: "Cancel"
+    negativeButtonText: "Cancel",
+    animationReverse: true,
+    animationType: "scale"
   };
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -41,12 +52,13 @@ class Alert extends React.Component<Props, State> {
       if (this.overlayRef.current) {
         this.overlayRef.current.show(() => {
           this.onClose = onClose;
-          console.log("on show done");
-          Animated.timing(this.state.animatedValue, {
-            toValue: 1,
-            useNativeDriver: true,
-            duration: 250
-          }).start();
+          if (this.props.animationType !== "none") {
+            Animated.timing(this.state.animatedValue, {
+              toValue: 1,
+              useNativeDriver: true,
+              duration: 250
+            }).start();
+          }
         });
       }
     });
@@ -59,22 +71,33 @@ class Alert extends React.Component<Props, State> {
         this.overlayRef.current.show(() => {
           this.onOk = onOk;
           this.onCancel = onCancel;
-          Animated.timing(this.state.animatedValue, {
-            toValue: 1,
-            useNativeDriver: true,
-            duration: 200
-          }).start();
+          if (this.props.animationType !== "none") {
+            Animated.timing(this.state.animatedValue, {
+              toValue: 1,
+              useNativeDriver: true,
+              duration: 250
+            }).start();
+          }
         });
       }
     });
   };
 
   private hide = (onHide?: () => void) => {
-    Animated.timing(this.state.animatedValue, {
-      toValue: 0,
-      useNativeDriver: true,
-      duration: 200
-    }).start(onHide);
+    const { animationReverse, animationType } = this.props;
+    if (animationType === "none") {
+      if (onHide) onHide();
+    } else {
+      if (animationReverse) {
+        Animated.timing(this.state.animatedValue, {
+          toValue: 0,
+          useNativeDriver: true,
+          duration: 200
+        }).start(onHide);
+      } else {
+        if (onHide) onHide();
+      }
+    }
   };
 
   private onOkPressed = () => {
@@ -101,35 +124,110 @@ class Alert extends React.Component<Props, State> {
     });
   };
 
+  private getAnimationStyle() {
+    const { animatedValue } = this.state;
+    const { animationType } = this.props;
+
+    let animationStyle = {};
+    switch (animationType) {
+      case "fade": {
+        animationStyle = {
+          opacity: animatedValue
+        };
+        break;
+      }
+
+      case "scale": {
+        const scale = animatedValue.interpolate({
+          inputRange: [0, 0.5, 1],
+          outputRange: [0, 0.7, 1],
+          extrapolate: "clamp"
+        });
+        animationStyle = {
+          opacity: animatedValue,
+          transform: [{ scale }]
+        };
+        break;
+      }
+
+      case "slideFromLeft": {
+        const translateX = animatedValue.interpolate({
+          inputRange: [0, 0.5, 1],
+          outputRange: [-width, -width / 4, 0],
+          extrapolate: "clamp"
+        });
+        animationStyle = {
+          opacity: animatedValue,
+          transform: [{ translateX }]
+        };
+        break;
+      }
+      case "slideFromRight": {
+        const translateX = animatedValue.interpolate({
+          inputRange: [0, 0.5, 1],
+          outputRange: [width, width / 4, 0],
+          extrapolate: "clamp"
+        });
+        animationStyle = {
+          opacity: animatedValue,
+          transform: [{ translateX }]
+        };
+        break;
+      }
+      case "slideFromBottom": {
+        const translateY = animatedValue.interpolate({
+          inputRange: [0, 0.5, 1],
+          outputRange: [height, height / 4, 0],
+          extrapolate: "clamp"
+        });
+        animationStyle = {
+          opacity: animatedValue,
+          transform: [{ translateY }]
+        };
+        break;
+      }
+      case "slideFromTop": {
+        const translateY = animatedValue.interpolate({
+          inputRange: [0, 0.5, 1],
+          outputRange: [-height, -height / 4, 0],
+          extrapolate: "clamp"
+        });
+        const opacity = animatedValue.interpolate({
+          inputRange: [0, 0.5, 1],
+          outputRange: [0, 0.7, 1],
+          extrapolate: "clamp"
+        });
+        animationStyle = {
+          opacity,
+          transform: [{ translateY }]
+        };
+        break;
+      }
+      default:
+        break;
+    }
+
+    return animationStyle;
+  }
+
   render() {
-    const { content, confirm, animatedValue } = this.state;
+    const { content, confirm } = this.state;
     const {
       positiveButtonText,
       positiveButtonStyle,
       negativeButtonStyle,
-      negativeButtonText
+      negativeButtonText,
+      overlayAnimated = true
     } = this.props;
 
-    const scale = animatedValue.interpolate({
-      inputRange: [0, 0.5, 1],
-      outputRange: [0, 0.7, 1],
-      extrapolate: "clamp"
-    });
-    const animationStyle = {
-      opacity: animatedValue,
-      transform: [{ scale }]
-    };
+    let animationStyle = this.getAnimationStyle();
 
+    const justifyContent = confirm ? "space-around" : "center";
     return (
-      <Overlay ref={this.overlayRef} animated>
+      <Overlay ref={this.overlayRef} animated={overlayAnimated}>
         <Animated.View style={[styles.container, animationStyle]}>
           <Text style={styles.content} text={content} />
-          <View
-            style={[
-              styles.buttonContainer,
-              { justifyContent: confirm ? "space-around" : "center" }
-            ]}
-          >
+          <View style={[styles.buttonContainer, { justifyContent }]}>
             <Button
               onPress={this.onOkPressed}
               style={[styles.okButton, positiveButtonStyle]}

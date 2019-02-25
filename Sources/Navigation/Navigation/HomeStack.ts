@@ -1,14 +1,29 @@
 import { createStackNavigator } from "react-navigation";
-import { Home } from "Screens";
+import { Home, Dashboard } from "Screens";
 import getSlideFromRightTransitionConfig from "./transitionConfig";
 
 const HomeStack = createStackNavigator(
   {
-    Home: Home
+    Home: Home,
+    Dashboard: Dashboard
   },
   {
     transitionConfig: getSlideFromRightTransitionConfig,
-    initialRouteName: "Home"
+    initialRouteName: "Home",
+    defaultNavigationOptions: ({ navigation }) => {
+      const gesturesEnabled = navigation.getParam("swipeBackEnabled", true);
+      return {
+        header: null,
+        gesturesEnabled
+      };
+    },
+    navigationOptions: ({ navigation }) => {
+      const params =
+        navigation.state.routes[navigation.state.index].params || {};
+      return {
+        drawerLockMode: params.drawerLockMode
+      };
+    }
   }
 );
 

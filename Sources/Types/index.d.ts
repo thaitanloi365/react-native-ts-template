@@ -10,9 +10,18 @@ import {
   ScrollViewProps as RNScrollViewProps,
   TextInputProps as RNTextInputProps,
   ModalProps as RNModalProps,
-  StatusBarProps as RNStatusBarProps
+  StatusBarProps as RNStatusBarProps,
+  ImageSourcePropType,
+  ImageStyle,
+  Animated
 } from "react-native";
+import {
+  DrawerItemsProps as RNDrawerProps,
+  NavigationScreenProp,
+  NavigationState
+} from "react-navigation";
 
+export type NavigationProps = NavigationScreenProp<NavigationState>;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 export type Point = {
@@ -20,10 +29,23 @@ export type Point = {
   y: number;
 };
 
+export type AnimationType =
+  | "slideFromLeft"
+  | "slideFromRight"
+  | "slideFromBottom"
+  | "slideFromTop"
+  | "fade"
+  | "scale"
+  | "none";
+
 export type TouchableProps = TouchableNativeFeedbackProps &
   TouchableOpacityProps;
 
 export type AlertProps = ViewProps & {
+  HeaderComponent?: () => JSX.Element;
+  overlayAnimated?: boolean;
+  animationType?: AnimationType;
+  animationReverse?: boolean;
   positiveButtonText?: string;
   positiveButtonStyle?: StyleProp<ViewStyle>;
   negativeButtonText?: string;
@@ -43,6 +65,7 @@ export type ButtonProps = TouchableProps & {
     colors?: string[];
   };
   rasied?: boolean;
+  boundedRipple?: boolean;
 };
 
 export type TextProps = RNTextProps & {
@@ -95,9 +118,12 @@ type TextInputExtraProps = Omit<RNTextInputProps, "style"> & ViewProps;
 export type TextInputProps = TextInputExtraProps & {
   underlineColor?: string;
   underlineWidth?: number;
+  inputContainerStyle?: StyleProp<TextStyle>;
   inputStyle?: StyleProp<TextStyle>;
   helperText?: string;
   helperStyle?: StyleProp<TextStyle>;
+  LeftComponent?: React.ReactElement | React.FunctionComponent;
+  RightComponent?: React.ReactElement | React.FunctionComponent;
 };
 
 type CodeInputExtraProps = Pick<
@@ -118,6 +144,14 @@ export type CodeInputProps = CodeInputExtraProps & {
   height?: number;
   inputBorderRadius?: number;
   onTextChanged?: (text: string) => void;
+};
+
+export type IconProps = ViewProps & {
+  size?: number;
+  iconSource: ImageSourcePropType;
+  iconContainerStyle?: StyleProp<ViewStyle>;
+  iconStyle?: StyleProp<ImageStyle>;
+  onPress?: () => void;
 };
 
 export type CardProps = ViewProps;
@@ -151,7 +185,10 @@ export type MenuProps = ViewProps & {
   initialText?: string;
 };
 
-export type StatusBarProps = RNStatusBarProps;
+export type StatusBarProps = RNStatusBarProps & {
+  // valid on iOS & Android transluent
+  style?: StyleProp<ViewStyle>;
+};
 
 export type HeaderProps = ViewProps & {
   statusBarVisible?: boolean;
@@ -159,9 +196,9 @@ export type HeaderProps = ViewProps & {
   title: string;
   titleStyle?: StyleProp<TextStyle>;
   titleContainerStyle?: StyleProp<ViewStyle>;
-  LeftComponent?: () => JSX.Element;
+  LeftComponent?: React.ReactElement | React.FunctionComponent;
   leftContainerStyle?: StyleProp<ViewStyle>;
-  RightComponent?: () => JSX.Element;
+  RightComponent?: React.ReactElement | React.FunctionComponent;
   rightContainerStyle?: StyleProp<ViewStyle>;
   backgroundColor?: string;
 };
@@ -170,4 +207,37 @@ export type InputGroupProps = ViewProps & {
   onInputFocus?: (index: number) => void;
   onInputEndEditing?: (index: number) => void;
   onInputSubmit?: () => void;
+  spacing?: number;
+};
+
+export type SectionProps = ViewProps & {
+  text: string;
+  textStyle?: StyleProp<TextStyle>;
+};
+
+export type DrawerProps = RNDrawerProps & {
+  drawerOpenProgress?: Animated.Value;
+  overlayColor?: string;
+  drawerType?: "front" | "back";
+  useNativeAnimations?: boolean;
+  contentContainerStyle?: StyleProp<ViewStyle>;
+};
+
+export type DrawerHeaderProps = ViewProps & {
+  imageContainerStyle?: ViewStyle;
+  imageSource?: ImageSourcePropType;
+  imageStyle?: StyleProp<ImageStyle>;
+  drawerOpenProgress?: Animated.Value;
+};
+
+export type DrawerItemProps = ViewProps & {
+  buttonStyle?: StyleProp<ViewStyle>;
+  leftIconSource?: ImageSourcePropType;
+  leftIconStyle?: StyleProp<ImageStyle>;
+  text: string;
+  textStyle?: StyleProp<TextStyle>;
+  rightIconSource?: ImageSourcePropType;
+  rightIconStyle?: StyleProp<ImageStyle>;
+  onPress?: () => void;
+  hiddenDivider?: boolean;
 };

@@ -30,19 +30,16 @@ class Toast extends React.Component<Props, State> {
   show = () => {
     LayoutAnimations.setLayoutAnimation(LayoutAnimations.PresetEaseInOut);
     this.setState({ height: 60 });
-    console.log("show");
   };
 
   hide = () => {
     LayoutAnimations.setLayoutAnimation(LayoutAnimations.PresetEaseInOut);
     this.setState({ height: 0 });
-    console.log("hide");
   };
 
   render() {
     const { text, backgroundColor, textStyle } = this.props;
     const { height } = this.state;
-    console.log({ height });
     return (
       <View style={[styles.container, { height }]}>
         <View style={[styles.textContainer, { backgroundColor }]}>
@@ -57,6 +54,7 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     top: statusBarHeight,
+    overflow: "hidden",
     left: 0,
     right: 0,
     height: 0,

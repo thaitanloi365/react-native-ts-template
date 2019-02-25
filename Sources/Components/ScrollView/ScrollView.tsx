@@ -23,7 +23,6 @@ export default class ScrollView extends React.Component<Props, State> {
   }
 
   private onContentSizeChange = (w: number, h: number) => {
-    console.log("onContentSizeChange");
     this.contentHeight = h;
     if (this.height !== 0) {
       this.updateScrollViewEnable();
@@ -31,7 +30,6 @@ export default class ScrollView extends React.Component<Props, State> {
   };
 
   private onLayout = (event: LayoutChangeEvent) => {
-    console.log("onLayoutChange");
     this.height = event.nativeEvent.layout.height;
     if (this.contentHeight != 0) {
       this.updateScrollViewEnable();

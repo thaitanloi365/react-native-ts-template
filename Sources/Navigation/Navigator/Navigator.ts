@@ -7,12 +7,23 @@ import {
   DrawerActions
 } from "react-navigation";
 
-type RouteName = "Start" | "Home" | "Authentication";
+type HomeStack = "Home" | "Dashboard";
+type RouteName = "Start" | "Authentication" | HomeStack;
 
 type AnimationType = "slideFromLeft" | "slideFromBottom";
-type AnimationParams = { animationType?: AnimationType };
-type BottomTabbarProps = { tabBarVisible: boolean };
-type ParamsProps = NavigationParams & AnimationParams & BottomTabbarProps | {};
+const paramsDefaultProps: ParamsDefaultProps = {
+  tabBarVisible: true,
+  swipeBackEnabled: true,
+  drawerLockMode: "unlocked"
+};
+type ParamsDefaultProps = {
+  animationType?: AnimationType;
+  tabBarVisible: boolean;
+  swipeBackEnabled: boolean;
+  drawerLockMode: "unlocked" | "locked-open" | "locked-closed";
+};
+type ParamsProps = NavigationParams & Partial<ParamsDefaultProps>;
+
 type NavigationContainer = NavigationContainerComponent | null;
 
 class Navigator {
@@ -32,7 +43,6 @@ class Navigator {
 
   public setRoot = (rootNavigator: NavigationContainer | null) => {
     if (this.rootNavigator) return;
-    console.log("root", rootNavigator);
     this.rootNavigator = rootNavigator;
   };
 
@@ -133,10 +143,10 @@ class Navigator {
     return null;
   }
 
-  public showLoading() {
+  public showLoading(msg?: string) {
     if (this.rootNavigator) {
       const { showLoading } = this.rootNavigator.props.screenProps;
-      if (showLoading) showLoading();
+      if (showLoading) showLoading(msg);
     }
   }
 

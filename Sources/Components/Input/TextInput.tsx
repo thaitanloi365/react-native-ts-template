@@ -15,15 +15,20 @@ type State = {
 };
 class TextInput extends React.Component<Props, State> {
   private textInputRef = React.createRef<RNTextInput>();
-  state: State = {
-    text: ""
-  };
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      text: props.defaultValue || ""
+    };
+  }
 
   setNativeProps = (props: object) => {
     if (this.textInputRef.current) {
       this.textInputRef.current.setNativeProps(props);
     }
   };
+
   focus = () => {
     if (this.textInputRef.current) this.textInputRef.current.focus();
   };
@@ -44,6 +49,30 @@ class TextInput extends React.Component<Props, State> {
         this.props.onChangeText(text);
       }
     });
+  };
+
+  private renderLeftComponent = () => {
+    const { LeftComponent } = this.props;
+    if (LeftComponent && React.isValidElement(LeftComponent))
+      return LeftComponent;
+
+    if (LeftComponent && typeof LeftComponent === "function") {
+      const c: Function = LeftComponent;
+      return c();
+    }
+    return null;
+  };
+
+  private renderRightComponent = () => {
+    const { RightComponent } = this.props;
+    if (RightComponent && React.isValidElement(RightComponent))
+      return RightComponent;
+
+    if (RightComponent && typeof RightComponent === "function") {
+      const c: Function = RightComponent;
+      return c();
+    }
+    return null;
   };
 
   render() {
@@ -69,18 +98,24 @@ class TextInput extends React.Component<Props, State> {
       editable,
       numberOfLines,
       scrollEnabled,
-      autoCapitalize
+      autoCapitalize,
+      inputContainerStyle
     } = this.props;
 
-    const underlineStyle = multiline
+    const hiddenUnderline = multiline || underlineWidth == 0;
+    const underlineStyle = hiddenUnderline
       ? {}
       : {
-          borderBottomColor: underlineColor || "black",
+          borderBottomColor: underlineWidth
+            ? underlineColor || "black"
+            : undefined,
           borderBottomWidth: underlineWidth || StyleSheet.hairlineWidth
         };
 
     const defaultStyle: any = {
+      marginBottom: 4,
       fontSize: 16,
+      flex: 1,
       fontFamily: Assets.fontFamily.roman,
       ...Platform.select({
         android: {
@@ -90,32 +125,41 @@ class TextInput extends React.Component<Props, State> {
       })
     };
 
+    const inputContainer: any = [
+      { flexDirection: "row", alignItems: "center" },
+      inputContainerStyle
+    ];
+
     return (
       <View style={[style, underlineStyle]}>
         {helperText && <Text text={helperText} style={helperStyle} />}
-        <RNTextInput
-          ref={this.textInputRef}
-          style={[defaultStyle, inputStyle]}
-          returnKeyLabel={returnKeyLabel}
-          returnKeyType={returnKeyType}
-          defaultValue={defaultValue}
-          placeholder={placeholder}
-          placeholderTextColor={placeholderTextColor}
-          keyboardType={keyboardType}
-          secureTextEntry={secureTextEntry}
-          maxLength={maxLength}
-          onChangeText={this.onTextChanged}
-          onSubmitEditing={onSubmitEditing}
-          onKeyPress={onKeyPress}
-          onFocus={onFocus}
-          underlineColorAndroid="transparent"
-          autoCapitalize={autoCapitalize || "none"}
-          autoCorrect={false}
-          editable={editable}
-          multiline={multiline}
-          numberOfLines={numberOfLines}
-          scrollEnabled={scrollEnabled}
-        />
+        <View style={inputContainer}>
+          {this.renderLeftComponent()}
+          <RNTextInput
+            ref={this.textInputRef}
+            style={[defaultStyle, inputStyle]}
+            returnKeyLabel={returnKeyLabel}
+            returnKeyType={returnKeyType}
+            defaultValue={defaultValue}
+            placeholder={placeholder}
+            placeholderTextColor={placeholderTextColor}
+            keyboardType={keyboardType}
+            secureTextEntry={secureTextEntry}
+            maxLength={maxLength}
+            onChangeText={this.onTextChanged}
+            onSubmitEditing={onSubmitEditing}
+            onKeyPress={onKeyPress}
+            onFocus={onFocus}
+            underlineColorAndroid="transparent"
+            autoCapitalize={autoCapitalize || "none"}
+            autoCorrect={false}
+            editable={editable}
+            multiline={multiline}
+            numberOfLines={numberOfLines}
+            scrollEnabled={scrollEnabled}
+          />
+          {this.renderRightComponent()}
+        </View>
       </View>
     );
   }

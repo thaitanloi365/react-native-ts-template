@@ -65,8 +65,6 @@ class KeyboardSpacer extends React.Component<Props, State> {
     this.setState({ keyboardSpace, isOpenned: true }, () => {
       if (onShow) onShow(keyboardSpace);
     });
-
-    console.log("keyboard space", keyboardSpace);
   }
 
   private resetKeyboardSpace(event: any) {

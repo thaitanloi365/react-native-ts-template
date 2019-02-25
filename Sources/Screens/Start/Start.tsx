@@ -1,20 +1,24 @@
 import React from "react";
-import { View } from "react-native";
 import { Navigator } from "Navigation";
-import { Text } from "Components";
+import { SplashScreen } from "Components";
+import { Authentication } from "Services";
+import RNSplashScreen from "react-native-splash-screen";
 
 class Start extends React.Component {
   componentDidMount() {
-    setTimeout(() => {
-      Navigator.navTo("Home");
-    }, 2000);
+    Authentication.createSession()
+      .then(success => {
+        RNSplashScreen.hide();
+        setTimeout(() => Navigator.navTo("Home"), 500);
+      })
+      .catch(error => {
+        RNSplashScreen.hide();
+        setTimeout(() => Navigator.navTo("Authentication"), 500);
+      });
   }
+
   render() {
-    return (
-      <View style={{ backgroundColor: "gray" }}>
-        <Text text="start" />
-      </View>
-    );
+    return <SplashScreen />;
   }
 }
 

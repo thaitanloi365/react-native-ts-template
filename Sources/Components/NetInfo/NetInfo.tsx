@@ -1,6 +1,7 @@
 import React from "react";
 import { NetInfo as RNNetInfo, Platform } from "react-native";
 import Toast from "../Toast/Toast";
+import { Strings } from "Localization";
 
 type Props = {};
 type State = {};
@@ -28,7 +29,6 @@ class NetInfo extends React.Component<Props, State> {
   }
 
   private handleConnectionChange = (isConnected: boolean) => {
-    console.log("handleConnectionChange", isConnected);
     if (this.toastRef.current) {
       if (isConnected) {
         this.toastRef.current.hide();
@@ -38,7 +38,9 @@ class NetInfo extends React.Component<Props, State> {
     }
   };
   render() {
-    return <Toast ref={this.toastRef} text="Network is not available" />;
+    return (
+      <Toast ref={this.toastRef} text={Strings.alert.networkNotAvailable} />
+    );
   }
 }
 

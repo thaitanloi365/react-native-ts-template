@@ -13,10 +13,10 @@ import Assets from "Assets";
 const isAndroid = Platform.OS === "android";
 type Props = ButtonProps;
 type State = {};
+
 class Button extends React.Component<Props, State> {
   static defaultProps: Props = {
-    TouchableComponent:
-      Platform.OS === "android" ? TouchableNativeFeedback : TouchableOpacity,
+    TouchableComponent: isAndroid ? TouchableNativeFeedback : TouchableOpacity,
     activeOpacity: 0.5,
     linearProps: {
       start: { x: 0, y: 0.5 },
@@ -37,6 +37,7 @@ class Button extends React.Component<Props, State> {
       linearProps,
       children,
       onLayout,
+      boundedRipple = false,
       ...other
     } = this.props;
 
@@ -52,7 +53,7 @@ class Button extends React.Component<Props, State> {
       if (Platform.Version >= 21) {
         other.background = TouchableNativeFeedback.Ripple(
           "ThemeAttrAndroid",
-          true
+          !boundedRipple
         );
       } else {
         other.background = TouchableNativeFeedback.SelectableBackground();
@@ -60,10 +61,12 @@ class Button extends React.Component<Props, State> {
     }
 
     const linearGradientProps = ViewComponent === View ? {} : linearProps;
+
     const backgroundColor =
       (style && StyleSheet.flatten(style).backgroundColor) ||
       (buttonStyle && StyleSheet.flatten(buttonStyle).backgroundColor) ||
       styles.button.backgroundColor;
+
     const { activeOpacity, background, onPress, disabled, hitSlop } = other;
 
     const isFixedDimension =
@@ -76,14 +79,15 @@ class Button extends React.Component<Props, State> {
     return (
       <View
         style={[rasied && styles.rasied, style, { borderRadius }]}
-        hitSlop={hitSlop}
         onLayout={onLayout}
+        hitSlop={hitSlop}
       >
         <TouchableComponent
           activeOpacity={activeOpacity}
           background={background}
           onPress={onPress}
           disabled={disabled}
+          hitSlop={hitSlop}
         >
           <ViewComponent
             {...linearGradientProps}
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
       android: {
         elevation: 2
       },
-      default: {
+      ios: {
         shadowColor: "rgba(0,0,0, .4)",
         shadowOffset: { height: 1, width: 1 },
         shadowOpacity: 1,
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 4,
-    backgroundColor: "#eee"
+    backgroundColor: Assets.colors.primary
   },
   full: {
     width: "100%",

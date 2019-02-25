@@ -8,7 +8,10 @@ const AuthenticationStack = createStackNavigator(
   },
   {
     transitionConfig: getSlideFromRightTransitionConfig,
-    initialRouteName: "Login"
+    initialRouteName: "Login",
+    defaultNavigationOptions: {
+      header: null
+    }
   }
 );
 

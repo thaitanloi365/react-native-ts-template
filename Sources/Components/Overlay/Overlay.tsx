@@ -65,20 +65,24 @@ class Overlay extends React.Component<Props, State> {
   };
 
   render() {
-    const { style, containerStyle, children } = this.props;
+    const { style, containerStyle, children, animated } = this.props;
     const { visible, animatedOpacity } = this.state;
     if (!visible) return null;
+    let animationStyle = {};
 
-    const opacity = animatedOpacity.interpolate({
-      inputRange: [0, 0.5, 1],
-      outputRange: [0, 0.7, 1],
-      extrapolate: "clamp"
-    });
+    if (animated) {
+      const opacity = animatedOpacity.interpolate({
+        inputRange: [0, 0.5, 1],
+        outputRange: [0, 0.7, 1],
+        extrapolate: "clamp"
+      });
+      animationStyle = { opacity };
+    }
 
     return (
       <TouchableWithoutFeedback onPress={this.onPressOutside}>
         <View style={styles.modal}>
-          <Animated.View style={[styles.fill, style, { opacity }]}>
+          <Animated.View style={[styles.fill, style, animationStyle]}>
             <TouchableWithoutFeedback>
               <View style={[styles.container, containerStyle]}>{children}</View>
             </TouchableWithoutFeedback>

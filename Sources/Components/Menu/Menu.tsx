@@ -137,7 +137,6 @@ class Menu extends React.Component<Props, State> {
         }
       : {};
 
-    console.log({ layout, visible });
     return (
       <View ref={this.menu} style={style} onLayout={this.onContainerLayout}>
         <Button

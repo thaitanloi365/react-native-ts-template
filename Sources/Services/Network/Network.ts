@@ -4,7 +4,7 @@ export const ERROR_CODE_NOT_FOUND = 404;
 export const ERROR_CODE_INVALID_REQUEST = 422;
 export const ERROR_CODE_SERVER = 500;
 
-const BASE_URL = "http://cms.jelly.city";
+const BASE_URL = "http://203.162.76.14:8080";
 
 class Network {
   private static instance = new Network();
@@ -47,11 +47,7 @@ class Network {
       timeout: 10000,
       headers: {
         ...header,
-        "Content-Type": "application/json",
-        version: ""
-      },
-      validateStatus: function(status) {
-        return status == ERROR_CODE_SUCCESS;
+        "Content-Type": "application/json"
       }
     });
     return response;
@@ -72,7 +68,6 @@ class Network {
       headers: {
         ...header,
         "Content-Type": "application/json",
-        version: "",
         "X-Token": this.token
       }
     });

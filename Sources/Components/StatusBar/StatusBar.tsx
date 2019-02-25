@@ -10,15 +10,18 @@ const statusBarHeight = Device.getStatusBarHeight(true);
 const StatusBar: React.SFC<Props> = props => {
   if (Platform.OS == "ios") {
     const {
+      style,
       barStyle,
       networkActivityIndicatorVisible,
       showHideTransition,
-      backgroundColor
+      backgroundColor,
+      animated
     } = props;
     const height = statusBarHeight;
     return (
-      <View style={{ backgroundColor, height }}>
+      <View style={[{ backgroundColor, height }, style]}>
         <RNStatusBar
+          animated={animated}
           barStyle={barStyle}
           networkActivityIndicatorVisible={networkActivityIndicatorVisible}
           showHideTransition={showHideTransition}
@@ -27,12 +30,13 @@ const StatusBar: React.SFC<Props> = props => {
     );
   }
 
-  const { barStyle, translucent, backgroundColor, animated } = props;
+  const { barStyle, translucent, backgroundColor, animated, style } = props;
   const height = statusBarHeight;
   if (translucent) {
     return (
-      <View style={{ height }}>
+      <View style={[{ height }, style]}>
         <RNStatusBar
+          translucent={true}
           barStyle={barStyle}
           backgroundColor={backgroundColor}
           animated={animated}
@@ -52,8 +56,9 @@ const StatusBar: React.SFC<Props> = props => {
 
 StatusBar.defaultProps = {
   translucent: true,
-  backgroundColor: Assets.colors.primaryDark,
-  barStyle: "light-content"
+  backgroundColor: Assets.colors.primary,
+  barStyle: "light-content",
+  animated: true
 };
 
 export default StatusBar;

@@ -3,13 +3,18 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { configStore } from "ReduxManager";
 import { Navigator, AppContainer } from "Navigation";
-import { SplashScreen, NetInfo, Loading, Alert } from "Components";
-
+import { NetInfo, Loading, Alert } from "Components";
+import RNSplashScreen from "react-native-splash-screen";
 const { store, persistor } = configStore();
 
 export default class App extends React.Component {
   private loadingRef = React.createRef<Loading>();
   private alertRef = React.createRef<Alert>();
+  componentDidMount() {
+    if (__DEV__) {
+      RNSplashScreen.hide();
+    }
+  }
   showLoading = () => {
     if (this.loadingRef.current) this.loadingRef.current.show();
   };
@@ -30,7 +35,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate loading={<SplashScreen />} persistor={persistor}>
+        <PersistGate persistor={persistor}>
           <AppContainer
             ref={r => {
               Navigator.setRoot(r);
@@ -42,8 +47,8 @@ export default class App extends React.Component {
               alertConfirm: this.alertConfirm
             }}
           />
-          <Loading ref={this.loadingRef} />
-          <Alert ref={this.alertRef} />
+          <Loading ref={this.loadingRef} overlayAnimated={false} />
+          <Alert ref={this.alertRef} overlayAnimated={false} />
           <NetInfo />
         </PersistGate>
       </Provider>

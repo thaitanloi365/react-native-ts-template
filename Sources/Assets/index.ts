@@ -1,6 +1,17 @@
 const images = {
   splashScreen: require("./Images/splashScreen.png"),
-  back: require("./Images/back.png")
+  back: require("./Images/back.png"),
+  drawerLogo: require("./Images/drawerLogo.png"),
+  search: require("./Images/search.png"),
+  username: require("./Images/username.png"),
+  password: require("./Images/password.png"),
+  logout: require("./Images/logout.png"),
+  settings: require("./Images/settings.png"),
+  faq: require("./Images/faq.png"),
+  contactUs: require("./Images/contactUs.png"),
+  hamburger: require("./Images/hamburger.png"),
+  profile: require("./Images/profile.png"),
+  changePassword: require("./Images/changePassword.png")
 };
 
 const colors = {
