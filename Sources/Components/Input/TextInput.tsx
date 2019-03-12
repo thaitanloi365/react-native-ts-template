@@ -3,16 +3,19 @@ import {
   View,
   TextInput as RNTextInput,
   Platform,
-  StyleSheet
+  StyleSheet,
+  GestureResponderEvent
 } from "react-native";
 import { TextInputProps } from "Types";
 import Text from "../Text/Text";
 import Assets from "Assets";
 
 type Props = TextInputProps;
+
 type State = {
   text: string;
 };
+
 class TextInput extends React.Component<Props, State> {
   private textInputRef = React.createRef<RNTextInput>();
 
@@ -30,7 +33,11 @@ class TextInput extends React.Component<Props, State> {
   };
 
   focus = () => {
-    if (this.textInputRef.current) this.textInputRef.current.focus();
+    if (this.textInputRef.current) {
+      if (!this.textInputRef.current.isFocused()) {
+        this.textInputRef.current.focus();
+      }
+    }
   };
 
   clearText = () => {
@@ -75,6 +82,11 @@ class TextInput extends React.Component<Props, State> {
     return null;
   };
 
+  private onStartShouldSetResponder = (e: GestureResponderEvent) => {
+    this.focus();
+    return true;
+  };
+
   render() {
     const {
       style,
@@ -113,10 +125,10 @@ class TextInput extends React.Component<Props, State> {
         };
 
     const defaultStyle: any = {
-      marginBottom: 4,
+      paddingBottom: 4,
       fontSize: 16,
       flex: 1,
-      fontFamily: Assets.fontFamily.roman,
+      fontFamily: Assets.font.avenir.roman,
       ...Platform.select({
         android: {
           paddingVertical: 0,
@@ -131,7 +143,10 @@ class TextInput extends React.Component<Props, State> {
     ];
 
     return (
-      <View style={[style, underlineStyle]}>
+      <View
+        style={[style, underlineStyle]}
+        onStartShouldSetResponder={this.onStartShouldSetResponder}
+      >
         {helperText && <Text text={helperText} style={helperStyle} />}
         <View style={inputContainer}>
           {this.renderLeftComponent()}

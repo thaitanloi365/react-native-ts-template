@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     paddingVertical: 6,
     fontSize: 16,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     color: Assets.colors.primary
   },
   rightIcon: {

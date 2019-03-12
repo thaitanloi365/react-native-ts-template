@@ -7,9 +7,6 @@ import {
   Animated
 } from "react-native";
 import { OverlayProps } from "Types";
-import { Device } from "Utils";
-
-const { width, height } = Device.getScreenSize();
 
 type Props = OverlayProps;
 
@@ -23,6 +20,7 @@ class Overlay extends React.Component<Props, State> {
 
   show = (onShow?: () => void) => {
     const { animated, duration = 200 } = this.props;
+    console.log("show", animated, duration);
     if (!animated) {
       this.state.animatedOpacity.setValue(1);
       this.setState({ visible: true }, onShow);
@@ -51,16 +49,10 @@ class Overlay extends React.Component<Props, State> {
     }
   };
 
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    return this.state.visible !== nextState.visible;
-  }
-
   private onPressOutside = () => {
-    const { onPressOutside, closeOnPressOutside } = this.props;
-    if (closeOnPressOutside) {
+    const { onPressOutside } = this.props;
+    if (onPressOutside) {
       this.hide(onPressOutside);
-    } else {
-      if (onPressOutside) onPressOutside();
     }
   };
 
@@ -112,8 +104,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 4
-    // maxWidth: width - 20,
-    // maxHeight: height - 20
   }
 });
 

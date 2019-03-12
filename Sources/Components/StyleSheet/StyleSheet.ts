@@ -4,7 +4,8 @@ import {
   TextStyle,
   ImageStyle,
   RegisteredStyle,
-  Dimensions
+  Dimensions,
+  StyleProp
 } from "react-native";
 
 const { width, height } = Dimensions.get("window");
@@ -16,10 +17,13 @@ const _baseHeight = 812;
 const hs = shortDimension / _baseWidth;
 const vs = longDimension / _baseHeight;
 
-type StyleProps = Partial<ViewStyle | TextStyle | ImageStyle>;
-type StyleObject = { [className: string]: StyleProps };
-function create(styles: StyleObject) {
-  return RNStyleSheet.create(styles);
+type Style = Partial<ViewStyle | TextStyle | ImageStyle>;
+type StyleObject = { [className: string]: StyleProp<Style> };
+type NamedStyles<T> = { [P in keyof T]: StyleProp<Style> };
+
+function create<T extends NamedStyles<T>>(styles: T | StyleObject): T {
+  // @ts-ignore: Unreachable code error
+  return RNStyleSheet.create<T>(styles);
 }
 
 function flatten<T>(style?: RegisteredStyle<T>): T {

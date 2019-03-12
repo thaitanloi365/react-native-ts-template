@@ -1,19 +1,10 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Platform,
-  Keyboard,
-  Animated,
-  Dimensions
-} from "react-native";
+import { View, StyleSheet, Platform, Keyboard, Animated } from "react-native";
 import { AlertProps } from "Types";
 import Assets from "Assets";
-import Overlay from "../Overlay/Overlay";
 import Text from "../Text/Text";
 import Button from "../Button/Button";
-
-const { width, height } = Dimensions.get("window");
+import AlertBase from "./AlertBase";
 
 type Props = AlertProps;
 
@@ -28,13 +19,15 @@ class Alert extends React.Component<Props, State> {
   private onOk?: () => void;
   private onCancel?: () => void;
 
-  private overlayRef = React.createRef<Overlay>();
+  private alertBaseRef = React.createRef<AlertBase>();
 
   static defaultProps: Props = {
     positiveButtonText: "OK",
     negativeButtonText: "Cancel",
     animationReverse: true,
-    animationType: "scale"
+    animationType: "scale",
+    overlayAnimated: true,
+    overlayDuration: 200
   };
 
   constructor(props: Props) {
@@ -49,16 +42,9 @@ class Alert extends React.Component<Props, State> {
   show = (msg: string, onClose?: () => void) => {
     Keyboard.dismiss();
     this.setState({ content: msg, confirm: false }, () => {
-      if (this.overlayRef.current) {
-        this.overlayRef.current.show(() => {
+      if (this.alertBaseRef.current) {
+        this.alertBaseRef.current.show(() => {
           this.onClose = onClose;
-          if (this.props.animationType !== "none") {
-            Animated.timing(this.state.animatedValue, {
-              toValue: 1,
-              useNativeDriver: true,
-              duration: 250
-            }).start();
-          }
         });
       }
     });
@@ -67,43 +53,25 @@ class Alert extends React.Component<Props, State> {
   confirm = (msg: string, onOk?: () => void, onCancel?: () => void) => {
     Keyboard.dismiss();
     this.setState({ content: msg, confirm: true }, () => {
-      if (this.overlayRef.current) {
-        this.overlayRef.current.show(() => {
+      if (this.alertBaseRef.current) {
+        this.alertBaseRef.current.show(() => {
           this.onOk = onOk;
           this.onCancel = onCancel;
-          if (this.props.animationType !== "none") {
-            Animated.timing(this.state.animatedValue, {
-              toValue: 1,
-              useNativeDriver: true,
-              duration: 250
-            }).start();
-          }
         });
       }
     });
   };
 
   private hide = (onHide?: () => void) => {
-    const { animationReverse, animationType } = this.props;
-    if (animationType === "none") {
-      if (onHide) onHide();
-    } else {
-      if (animationReverse) {
-        Animated.timing(this.state.animatedValue, {
-          toValue: 0,
-          useNativeDriver: true,
-          duration: 200
-        }).start(onHide);
-      } else {
-        if (onHide) onHide();
-      }
+    if (this.alertBaseRef.current) {
+      this.alertBaseRef.current.hide(onHide);
     }
   };
 
   private onOkPressed = () => {
     this.hide(() => {
-      if (this.overlayRef.current) {
-        this.overlayRef.current.hide(() => {
+      if (this.alertBaseRef.current) {
+        this.alertBaseRef.current.hide(() => {
           if (this.state.confirm) {
             if (this.onOk) this.onOk();
           } else {
@@ -116,99 +84,13 @@ class Alert extends React.Component<Props, State> {
 
   private onCancelPressed = () => {
     this.hide(() => {
-      if (this.overlayRef.current) {
-        this.overlayRef.current.hide(() => {
+      if (this.alertBaseRef.current) {
+        this.alertBaseRef.current.hide(() => {
           if (this.onCancel) this.onCancel();
         });
       }
     });
   };
-
-  private getAnimationStyle() {
-    const { animatedValue } = this.state;
-    const { animationType } = this.props;
-
-    let animationStyle = {};
-    switch (animationType) {
-      case "fade": {
-        animationStyle = {
-          opacity: animatedValue
-        };
-        break;
-      }
-
-      case "scale": {
-        const scale = animatedValue.interpolate({
-          inputRange: [0, 0.5, 1],
-          outputRange: [0, 0.7, 1],
-          extrapolate: "clamp"
-        });
-        animationStyle = {
-          opacity: animatedValue,
-          transform: [{ scale }]
-        };
-        break;
-      }
-
-      case "slideFromLeft": {
-        const translateX = animatedValue.interpolate({
-          inputRange: [0, 0.5, 1],
-          outputRange: [-width, -width / 4, 0],
-          extrapolate: "clamp"
-        });
-        animationStyle = {
-          opacity: animatedValue,
-          transform: [{ translateX }]
-        };
-        break;
-      }
-      case "slideFromRight": {
-        const translateX = animatedValue.interpolate({
-          inputRange: [0, 0.5, 1],
-          outputRange: [width, width / 4, 0],
-          extrapolate: "clamp"
-        });
-        animationStyle = {
-          opacity: animatedValue,
-          transform: [{ translateX }]
-        };
-        break;
-      }
-      case "slideFromBottom": {
-        const translateY = animatedValue.interpolate({
-          inputRange: [0, 0.5, 1],
-          outputRange: [height, height / 4, 0],
-          extrapolate: "clamp"
-        });
-        animationStyle = {
-          opacity: animatedValue,
-          transform: [{ translateY }]
-        };
-        break;
-      }
-      case "slideFromTop": {
-        const translateY = animatedValue.interpolate({
-          inputRange: [0, 0.5, 1],
-          outputRange: [-height, -height / 4, 0],
-          extrapolate: "clamp"
-        });
-        const opacity = animatedValue.interpolate({
-          inputRange: [0, 0.5, 1],
-          outputRange: [0, 0.7, 1],
-          extrapolate: "clamp"
-        });
-        animationStyle = {
-          opacity,
-          transform: [{ translateY }]
-        };
-        break;
-      }
-      default:
-        break;
-    }
-
-    return animationStyle;
-  }
 
   render() {
     const { content, confirm } = this.state;
@@ -217,34 +99,41 @@ class Alert extends React.Component<Props, State> {
       positiveButtonStyle,
       negativeButtonStyle,
       negativeButtonText,
-      overlayAnimated = true
+      overlayAnimated,
+      overlayDuration,
+      animationReverse,
+      animationType
     } = this.props;
 
-    let animationStyle = this.getAnimationStyle();
-
     const justifyContent = confirm ? "space-around" : "center";
+
+    console.log({ overlayAnimated });
     return (
-      <Overlay ref={this.overlayRef} animated={overlayAnimated}>
-        <Animated.View style={[styles.container, animationStyle]}>
-          <Text style={styles.content} text={content} />
-          <View style={[styles.buttonContainer, { justifyContent }]}>
+      <AlertBase
+        ref={this.alertBaseRef}
+        overlayAnimated={overlayAnimated}
+        overlayDuration={overlayDuration}
+        animationReverse={animationReverse}
+        animationType={animationType}
+      >
+        <Text style={styles.content} text={content} />
+        <View style={[styles.buttonContainer, { justifyContent }]}>
+          <Button
+            onPress={this.onOkPressed}
+            style={[styles.okButton, positiveButtonStyle]}
+            text={positiveButtonText}
+            textStyle={styles.okButtonText}
+          />
+          {confirm && (
             <Button
-              onPress={this.onOkPressed}
-              style={[styles.okButton, positiveButtonStyle]}
-              text={positiveButtonText}
-              textStyle={styles.okButtonText}
+              onPress={this.onCancelPressed}
+              style={[styles.cancelButton, negativeButtonStyle]}
+              text={negativeButtonText}
+              textStyle={styles.cancelButtonText}
             />
-            {confirm && (
-              <Button
-                onPress={this.onCancelPressed}
-                style={[styles.cancelButton, negativeButtonStyle]}
-                text={negativeButtonText}
-                textStyle={styles.cancelButtonText}
-              />
-            )}
-          </View>
-        </Animated.View>
-      </Overlay>
+          )}
+        </View>
+      </AlertBase>
     );
   }
 }
@@ -271,7 +160,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     marginBottom: 37,
     fontSize: 18,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     textAlign: "center",
     color: Assets.colors.slate
   },
@@ -279,7 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 10
+    marginBottom: 16
   },
   okButton: {
     marginHorizontal: 20,
@@ -291,7 +180,7 @@ const styles = StyleSheet.create({
   },
   okButtonText: {
     fontSize: 18,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     color: "white",
     textAlign: "center"
   },
@@ -305,7 +194,7 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     fontSize: 18,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     color: "white"
   }
 });

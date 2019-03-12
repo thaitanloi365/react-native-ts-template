@@ -1,8 +1,6 @@
 import { Action } from "redux";
 import { IAction, ActionTypes } from "./UserStorageActionTypes";
 
-
-
 function saveUserToken<T>(userToken: T): IAction<T> {
   return {
     type: ActionTypes.SAVE_USER_TOKEN,

@@ -1,11 +1,14 @@
-import { combineReducers, Reducer } from "redux";
+import { combineReducers } from "redux";
 
 import UserStorageReducer from "../UserStorage/UserStorageReducer";
+import AppConfigurationReducer from "../AppConfiguration/AppConfigurationReducer";
 
 export const initialState = {
-  userStorage: UserStorageReducer.initialState
+  userStorage: UserStorageReducer.initialState,
+  appConfiguration: AppConfigurationReducer.initialState
 };
 
-export const reducer: Reducer<{ userStorage: any }> = combineReducers({
-  userStorage: UserStorageReducer.reducer
+export const reducer = combineReducers({
+  userStorage: UserStorageReducer.reducer,
+  appConfiguration: AppConfigurationReducer.reducer
 });

@@ -4,7 +4,11 @@ import { middlewares } from "./Middleware";
 import { initialState, reducer } from "./Reducer";
 
 type StoreState = typeof initialState;
-const store = createStore(reducer, applyMiddleware(...middlewares));
+const store = createStore(
+  reducer,
+  { appConfiguration: undefined, userStorage: undefined },
+  applyMiddleware(...middlewares)
+);
 
 export const configStore = () => {
   const persistor = persistStore(store);
@@ -12,5 +16,6 @@ export const configStore = () => {
 };
 
 export function getStore(): Store<StoreState> {
+  // @ts-ignore
   return store;
 }

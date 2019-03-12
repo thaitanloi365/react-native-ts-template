@@ -16,12 +16,6 @@ const drawerConfig: any = {
   overlayColor: "rgba(0,0,0,0.3)",
   drawerType: "front",
   useNativeAnimations: true,
-  contentContainerStyle: {
-    shadowColor: "#000000",
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    shadowOffset: { height: 0, width: -4 }
-  },
   drawerWidth,
   defaultNavigationOptions: {
     header: null

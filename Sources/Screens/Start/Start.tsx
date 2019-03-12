@@ -5,16 +5,32 @@ import { Authentication } from "Services";
 import RNSplashScreen from "react-native-splash-screen";
 
 class Start extends React.Component {
-  componentDidMount() {
+  private timeoutHandler: any;
+
+  private start = () => {
     Authentication.createSession()
       .then(success => {
         RNSplashScreen.hide();
-        setTimeout(() => Navigator.navTo("Home"), 500);
+        this.timeoutHandler = setTimeout(() => Navigator.navTo("Home"), 500);
       })
       .catch(error => {
         RNSplashScreen.hide();
-        setTimeout(() => Navigator.navTo("Authentication"), 500);
+        this.timeoutHandler = setTimeout(
+          () => Navigator.navTo("Authentication"),
+          500
+        );
       });
+  };
+
+  componentWillMount() {
+    this.start();
+  }
+
+  componentWillUnmount() {
+    if (this.timeoutHandler) {
+      clearTimeout(this.timeoutHandler);
+      this.timeoutHandler = 0;
+    }
   }
 
   render() {

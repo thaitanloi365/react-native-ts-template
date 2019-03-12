@@ -6,17 +6,16 @@ import {
   LayoutRectangle,
   StyleSheet,
   Modal,
-  Animated,
   TouchableWithoutFeedback,
   TouchableOpacity,
   Platform
 } from "react-native";
-import { MenuProps, MenuItem } from "Types";
+import { DropdownProps, DropdownItem } from "Types";
+import { LayoutAnimations } from "Utils";
 import Button from "../Button/Button";
 import Text from "../Text/Text";
-import { LayoutAnimations } from "Utils";
 
-type Props = MenuProps;
+type Props = DropdownProps;
 type State = {
   visible: boolean;
   layout?: LayoutRectangle;
@@ -25,7 +24,7 @@ type State = {
   menuText: string;
 };
 
-class Menu extends React.Component<Props, State> {
+class Dropdown extends React.Component<Props, State> {
   private menu = React.createRef<View>();
   private flatListContainerRef = React.createRef<View>();
 
@@ -81,7 +80,7 @@ class Menu extends React.Component<Props, State> {
     }
   };
 
-  private onItemSelected = (item: MenuItem, index: number) => {
+  private onItemSelected = (item: DropdownItem, index: number) => {
     if (Platform.OS == "android") {
       LayoutAnimations.setLayoutAnimation(LayoutAnimations.PresetEaseInOut);
       this.setState({ updateHeight: 0 }, () => {
@@ -110,7 +109,7 @@ class Menu extends React.Component<Props, State> {
     item,
     index
   }: {
-    item: MenuItem;
+    item: DropdownItem;
     index: number;
   }) => {
     const onPress = () => this.onItemSelected(item, index);
@@ -185,4 +184,4 @@ const styles = StyleSheet.create({
     color: "black"
   }
 });
-export default Menu;
+export default Dropdown;

@@ -3,7 +3,6 @@ import { View, StyleSheet, Animated } from "react-native";
 import { DrawerHeaderProps } from "Types";
 import { Device } from "Utils";
 import Assets from "Assets";
-import { StatusBar } from "Components";
 
 const statusBarHeight = Device.getStatusBarHeight(false) + 10;
 
@@ -72,13 +71,13 @@ const styles = StyleSheet.create({
   },
   usename: {
     fontSize: 16,
-    fontFamily: Assets.fontFamily.heavy,
+    fontFamily: Assets.font.avenir.heavy,
     color: Assets.colors.slate
   },
   text: {
     fontSize: 16,
     marginLeft: 5,
-    fontFamily: Assets.fontFamily.roman,
+    fontFamily: Assets.font.avenir.roman,
     color: Assets.colors.slate
   }
 });

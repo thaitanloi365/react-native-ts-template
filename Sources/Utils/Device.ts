@@ -47,5 +47,7 @@ export default {
   isAndroid,
   version,
   getStatusBarHeight,
-  getHeaderHeight
+  getHeaderHeight,
+  width,
+  height
 };

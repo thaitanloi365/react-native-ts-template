@@ -11,6 +11,9 @@ import DrawerHeader from "./DrawerHeader";
 
 type Props = DrawerProps;
 class Drawer extends React.Component<Props> {
+  componentWillMount() {
+    Navigator.setDrawer(this.props);
+  }
   private onLogout = () => {
     Navigator.alertConfirm(Strings.alert.logout, () => {
       Authentication.logout().then(success => {
@@ -101,14 +104,14 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 18,
     fontSize: 14,
-    fontFamily: Assets.fontFamily.book,
+    fontFamily: Assets.font.avenir.book,
     color: Assets.colors.slate
   },
   sectionText: {
     paddingVertical: 5,
     paddingLeft: 24,
     fontSize: 16,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     color: "white"
   }
 });

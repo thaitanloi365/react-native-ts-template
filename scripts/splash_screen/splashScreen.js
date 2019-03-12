@@ -25,25 +25,25 @@ function install() {
     });
   });
 
-  // For Android
-  const android_styles_dir = path.join(
-    rootDir,
-    `android/app/src/main/res/values/styles.xml`
-  );
-  fs.readFile(android_styles_dir, "utf8", function(err, data) {
-    if (err) {
-      return console.error(err);
-    }
-    // let result = data.replace(
-    //   "<!-- Customize your theme here. -->",
-    //   '<item name="android:windowIsTranslucent">true</item>'
-    // );
-    // result = result.replace();
+  // // For Android
+  // const android_styles_dir = path.join(
+  //   rootDir,
+  //   `android/app/src/main/res/values/styles.xml`
+  // );
+  // fs.readFile(android_styles_dir, "utf8", function(err, data) {
+  //   if (err) {
+  //     return console.error(err);
+  //   }
+  //   let result = data.replace(
+  //     "<!-- Customize your theme here. -->",
+  //     '<item name="android:windowIsTranslucent">true</item>'
+  //   );
+  //   result = result.replace();
 
-    fs.writeFile(android_styles_dir, result, "utf8", function(err) {
-      if (err) return console.error(err);
-    });
-  });
+  //   fs.writeFile(android_styles_dir, result, "utf8", function(err) {
+  //     if (err) return console.error(err);
+  //   });
+  // });
 
   const android_manifest_dir = path.join(
     rootDir,

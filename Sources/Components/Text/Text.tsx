@@ -6,7 +6,7 @@ import Assets from "Assets";
 type Props = TextProps;
 const Text: React.SFC<Props> = props => {
   const { text, children, style } = props;
-  const c = children || text || "Default Text";
+  const c = children || text;
   return <RNText style={[styles.text, style]}>{c}</RNText>;
 };
 
@@ -19,7 +19,7 @@ Text.displayName = "Custom Text";
 const styles = StyleSheet.create({
   text: {
     fontSize: 16,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     color: "white"
   }
 });

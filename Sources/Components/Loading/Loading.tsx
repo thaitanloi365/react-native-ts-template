@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Platform, StyleSheet } from "react-native";
-import { CircleSnail } from "../Progress";
+import ActivityIndicator from "../ActivityIndicator/ActivityIndicator";
 import Overlay from "../Overlay/Overlay";
 import Text from "../Text/Text";
 import Assets from "Assets";
@@ -14,7 +14,9 @@ type State = {
 
 class Loading extends React.Component<Props, State> {
   private overlayRef = React.createRef<Overlay>();
+
   state: State = { msg: "Loading" };
+
   show = (msg?: string) => {
     this.setState({ msg }, () => {
       if (this.overlayRef.current) {
@@ -35,7 +37,7 @@ class Loading extends React.Component<Props, State> {
     return (
       <Overlay ref={this.overlayRef} animated={overlayAnimated} duration={250}>
         <View style={styles.container}>
-          <CircleSnail thickness={3} size={50} color={Assets.colors.primary} />
+          <ActivityIndicator />
           <Text style={styles.text} text={msg} />
         </View>
       </Overlay>
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     textAlign: "left",
     fontSize: 18,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     color: Assets.colors.slate
   }
 });

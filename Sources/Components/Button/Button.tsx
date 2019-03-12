@@ -1,108 +1,39 @@
 import React from "react";
-import Text from "../Text/Text";
 import { ButtonProps } from "Types";
-import {
-  StyleSheet,
-  View,
-  Platform,
-  TouchableOpacity,
-  TouchableNativeFeedback
-} from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import Assets from "Assets";
+import Touchable from "../Touchable/Touchable";
+import Text from "../Text/Text";
 
-const isAndroid = Platform.OS === "android";
 type Props = ButtonProps;
 type State = {};
 
 class Button extends React.Component<Props, State> {
-  static defaultProps: Props = {
-    TouchableComponent: isAndroid ? TouchableNativeFeedback : TouchableOpacity,
-    activeOpacity: 0.5,
-    linearProps: {
-      start: { x: 0, y: 0.5 },
-      end: { x: 1, y: 0.5 },
-      colors: [Assets.colors.primaryDark, Assets.colors.primary],
-      locations: [0, 1]
-    }
-  };
   render() {
     const {
       style,
       buttonStyle,
       text,
       textStyle,
-      rasied,
-      TouchableComponent = TouchableOpacity,
-      ViewComponent = View,
-      linearProps,
       children,
-      onLayout,
-      boundedRipple = false,
+      disabled,
+      rasied,
       ...other
     } = this.props;
-
-    const hasBorder =
-      (buttonStyle && StyleSheet.flatten(buttonStyle).borderRadius) ||
-      (style && StyleSheet.flatten(style).borderRadius);
-    const borderRadius =
-      (buttonStyle && StyleSheet.flatten(buttonStyle).borderRadius) ||
-      (style && StyleSheet.flatten(style).borderRadius) ||
-      styles.button.borderRadius;
-
-    if (isAndroid && hasBorder && !other.background) {
-      if (Platform.Version >= 21) {
-        other.background = TouchableNativeFeedback.Ripple(
-          "ThemeAttrAndroid",
-          !boundedRipple
-        );
-      } else {
-        other.background = TouchableNativeFeedback.SelectableBackground();
-      }
-    }
-
-    const linearGradientProps = ViewComponent === View ? {} : linearProps;
-
     const backgroundColor =
       (style && StyleSheet.flatten(style).backgroundColor) ||
-      (buttonStyle && StyleSheet.flatten(buttonStyle).backgroundColor) ||
       styles.button.backgroundColor;
 
-    const { activeOpacity, background, onPress, disabled, hitSlop } = other;
-
-    const isFixedDimension =
-      style &&
-      StyleSheet.flatten(style).width &&
-      StyleSheet.flatten(style).height;
-
-    const fixedStyle = isFixedDimension ? styles.full : { padding: 8 };
-
     return (
-      <View
-        style={[rasied && styles.rasied, style, { borderRadius }]}
-        onLayout={onLayout}
-        hitSlop={hitSlop}
+      <Touchable
+        style={style}
+        disabled={disabled}
+        touchableStyle={[styles.button, { backgroundColor }, buttonStyle]}
+        {...other}
       >
-        <TouchableComponent
-          activeOpacity={activeOpacity}
-          background={background}
-          onPress={onPress}
-          disabled={disabled}
-          hitSlop={hitSlop}
-        >
-          <ViewComponent
-            {...linearGradientProps}
-            style={[
-              styles.button,
-              { backgroundColor, borderRadius },
-              fixedStyle,
-              buttonStyle
-            ]}
-          >
-            {text && <Text text={text} style={textStyle} />}
-            {children}
-          </ViewComponent>
-        </TouchableComponent>
-      </View>
+        {text && <Text text={text} style={textStyle} />}
+        {children}
+      </Touchable>
     );
   }
 }
@@ -126,12 +57,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 4,
+    paddingVertical: 8,
     backgroundColor: Assets.colors.primary
-  },
-  full: {
-    width: "100%",
-    height: "100%"
   }
 });
 export default Button;

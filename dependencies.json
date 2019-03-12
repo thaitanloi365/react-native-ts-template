@@ -1,4 +1,5 @@
 {
+  "moment": "latest",
   "axios": "latest",
   "react-navigation": "latest",
   "react-native-splash-screen": "latest",
@@ -6,5 +7,6 @@
   "redux": "latest",
   "react-redux": "latest",
   "redux-persist": "latest",
-  "redux-thunk": "latest"
+  "redux-thunk": "latest",
+  "react-native-code-push": "latest"
 }

@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     marginLeft: 53,
     marginBottom: 7,
     fontSize: 13,
-    fontFamily: Assets.fontFamily.mediumOblique,
+    fontFamily: Assets.font.avenir.mediumOblique,
     color: Assets.colors.slate
   },
   container: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 17,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     color: Assets.colors.slate,
     marginLeft: 20
   }

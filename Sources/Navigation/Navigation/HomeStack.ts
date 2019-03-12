@@ -1,11 +1,10 @@
 import { createStackNavigator } from "react-navigation";
-import { Home, Dashboard } from "Screens";
+import { Home } from "Screens";
 import getSlideFromRightTransitionConfig from "./transitionConfig";
 
 const HomeStack = createStackNavigator(
   {
-    Home: Home,
-    Dashboard: Dashboard
+    Home: Home
   },
   {
     transitionConfig: getSlideFromRightTransitionConfig,

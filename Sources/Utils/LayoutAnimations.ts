@@ -5,13 +5,6 @@ import {
   LayoutAnimationConfig
 } from "react-native";
 
-type LayoutAnimationType =
-  | "Linear"
-  | "Spring"
-  | "Keyboard"
-  | "EaseInOut"
-  | "Default";
-
 function enableAndroidLayoutAnimation() {
   if (Platform.OS == "android") {
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -19,54 +12,50 @@ function enableAndroidLayoutAnimation() {
   }
 }
 
-const Default: LayoutAnimationConfig = LayoutAnimation.Presets.linear;
-
-const Linear: LayoutAnimationConfig = {
-  duration: 200,
+const Keyboard: LayoutAnimationConfig = {
+  duration: 250,
   create: {
+    type: LayoutAnimation.Types.easeInEaseOut
+  },
+  update: {
+    type: LayoutAnimation.Types.easeInEaseOut
+  },
+  delete: {
+    type: LayoutAnimation.Types.easeInEaseOut
+  }
+};
+
+const Toast: LayoutAnimationConfig = {
+  duration: 250,
+  create: {
+    delay: 500,
     type: LayoutAnimation.Types.linear,
     property: LayoutAnimation.Properties.opacity
   },
   update: {
-    type: LayoutAnimation.Types.easeInEaseOut
-  }
-};
-
-const Spring: LayoutAnimationConfig = {
-  duration: 250,
-  create: {
-    duration: 250,
     type: LayoutAnimation.Types.easeInEaseOut,
     property: LayoutAnimation.Properties.opacity
   },
-  update: {
-    type: LayoutAnimation.Types.spring,
-    springDamping: 200
+  delete: {
+    type: LayoutAnimation.Types.easeOut,
+    property: LayoutAnimation.Properties.opacity
   }
 };
 
-const EaseInOut: LayoutAnimationConfig = {
+const ListItem: LayoutAnimationConfig = {
   duration: 250,
   create: {
-    duration: 250,
+    type: LayoutAnimation.Types.spring,
+    property: LayoutAnimation.Properties.scaleXY,
+    springDamping: 0.7
+  },
+  update: {
     type: LayoutAnimation.Types.easeInEaseOut,
     property: LayoutAnimation.Properties.opacity
   },
-  update: {
-    type: LayoutAnimation.Types.spring,
-    springDamping: 200
-  }
-};
-
-const Keyboard: LayoutAnimationConfig = {
-  duration: 250,
-  create: {
-    duration: 250,
-    type: LayoutAnimation.Types.keyboard,
+  delete: {
+    type: LayoutAnimation.Types.easeInEaseOut,
     property: LayoutAnimation.Properties.opacity
-  },
-  update: {
-    type: LayoutAnimation.Types.easeInEaseOut
   }
 };
 
@@ -77,7 +66,7 @@ function setLayoutAnimation(
   if (config) {
     LayoutAnimation.configureNext(config, callback);
   } else {
-    LayoutAnimation.configureNext(Default, callback);
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear, callback);
   }
 }
 
@@ -87,11 +76,9 @@ const PresetSpring = LayoutAnimation.Presets.spring;
 export default {
   enableAndroidLayoutAnimation,
   setLayoutAnimation,
-  Linear,
-  Spring,
+  Toast,
+  ListItem,
   Keyboard,
-  EaseInOut,
-  Default,
   PresetEaseInOut,
   PresetLinear,
   PresetSpring

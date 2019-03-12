@@ -1,7 +1,7 @@
 import React from "react";
-import Button from "../Button/Button";
+import ImageView from "../Image/ImageView";
+import Touchable from "../Touchable/Touchable";
 import { IconProps } from "Types";
-import { Image, View } from "react-native";
 
 type Props = IconProps;
 const Icon: React.SFC<Props> = props => {
@@ -12,21 +12,29 @@ const Icon: React.SFC<Props> = props => {
     onPress,
     hitSlop,
     iconContainerStyle,
-    size = 24
+    size = 22
   } = props;
 
-  const containerStyle = {
+  const containerStyle: any = {
     width: size * 2,
     height: size * 2,
     borderRadius: size,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center"
   };
   return (
-    <Button onPress={onPress} style={[containerStyle, style]} hitSlop={hitSlop}>
-      <View style={[{ padding: 5 }, iconContainerStyle]}>
-        <Image style={iconStyle} source={iconSource} />
-      </View>
-    </Button>
+    <Touchable
+      onPress={onPress}
+      touchableStyle={[style, containerStyle]}
+      hitSlop={hitSlop}
+    >
+      <ImageView
+        style={iconContainerStyle}
+        imageStyle={iconStyle}
+        source={iconSource}
+      />
+    </Touchable>
   );
 };
 

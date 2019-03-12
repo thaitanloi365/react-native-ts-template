@@ -3,11 +3,7 @@ import {
   Animated,
   PanResponder,
   PanResponderInstance,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Easing
+  Dimensions
 } from "react-native";
 import { BottomSheetBaseProps } from "Types";
 import Modal from "../Modal/Modal";
@@ -17,7 +13,6 @@ const windowHeight = height;
 
 type Props = BottomSheetBaseProps;
 type State = {
-  visible: boolean;
   animatedHeight: Animated.Value;
   animatedPan: Animated.ValueXY;
 };
@@ -35,7 +30,6 @@ class BottomSheetBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      visible: false,
       animatedHeight: new Animated.Value(0),
       animatedPan: new Animated.ValueXY()
     };
@@ -66,14 +60,6 @@ class BottomSheetBase extends React.Component<Props, State> {
   }
 
   show = () => {
-    // this.setState({ visible: true }, () => {
-    //   Animated.timing(this.state.animatedHeight, {
-    //     toValue: 1,
-    //     duration: duration,
-    //     easing: Easing.inOut(Easing.ease),
-    //     useNativeDriver: true
-    //   }).start();
-    // });
     if (this.modalRef.current) {
       const { duration = 400 } = this.props;
       this.modalRef.current.show(() => {
@@ -106,7 +92,7 @@ class BottomSheetBase extends React.Component<Props, State> {
   };
 
   render() {
-    const { visible, animatedHeight, animatedPan } = this.state;
+    const { animatedHeight, animatedPan } = this.state;
 
     const {
       children,
@@ -140,7 +126,7 @@ class BottomSheetBase extends React.Component<Props, State> {
         ref={this.modalRef}
         style={{ justifyContent: "flex-end" }}
         containerStyle={{ maxWidth: "100%", width: "100%" }}
-        onPressOutside={this.hide}
+        onPressOutside={this.onPressOutSide}
         duration={duration}
         animated
       >

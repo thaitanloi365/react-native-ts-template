@@ -1,13 +1,15 @@
 import React from "react";
-import { ImageBackground, StyleSheet } from "react-native";
 import Assets from "Assets";
+import { ImageBackground, StyleSheet } from "react-native";
 
-const SplashScreen = () => {
+const SplashScreen: React.SFC = props => {
   return (
     <ImageBackground
       source={Assets.images.splashScreen}
       style={StyleSheet.absoluteFill}
-    />
+    >
+      {props.children}
+    </ImageBackground>
   );
 };
 

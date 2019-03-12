@@ -1,22 +1,25 @@
 import React from "react";
+import RNSplashScreen from "react-native-splash-screen";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { configStore } from "ReduxManager";
 import { Navigator, AppContainer } from "Navigation";
-import { NetInfo, Loading, Alert } from "Components";
-import RNSplashScreen from "react-native-splash-screen";
+import { NetInfo, Loading, Alert, CodePushUpdate } from "Components";
+
 const { store, persistor } = configStore();
 
-export default class App extends React.Component {
+export class App extends React.Component {
   private loadingRef = React.createRef<Loading>();
   private alertRef = React.createRef<Alert>();
-  componentDidMount() {
+
+  async componentDidMount() {
     if (__DEV__) {
       RNSplashScreen.hide();
     }
   }
-  showLoading = () => {
-    if (this.loadingRef.current) this.loadingRef.current.show();
+
+  showLoading = (msg?: string) => {
+    if (this.loadingRef.current) this.loadingRef.current.show(msg);
   };
 
   hideLoading = (onClose?: () => void) => {
@@ -47,11 +50,14 @@ export default class App extends React.Component {
               alertConfirm: this.alertConfirm
             }}
           />
-          <Loading ref={this.loadingRef} overlayAnimated={false} />
-          <Alert ref={this.alertRef} overlayAnimated={false} />
+          <Loading ref={this.loadingRef} />
+          <Alert ref={this.alertRef} />
           <NetInfo />
+          <CodePushUpdate deploymentKey="" />
         </PersistGate>
       </Provider>
     );
   }
 }
+
+export default App;

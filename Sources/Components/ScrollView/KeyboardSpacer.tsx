@@ -51,7 +51,7 @@ class KeyboardSpacer extends React.Component<Props, State> {
     if (!event.endCoordinates || this.state.isOpenned) {
       return;
     }
-    let animationConfig = LayoutAnimations.EaseInOut;
+    let animationConfig = LayoutAnimations.PresetEaseInOut;
     if (Platform.OS === "ios") {
       animationConfig = LayoutAnimations.Keyboard;
     }
@@ -69,7 +69,7 @@ class KeyboardSpacer extends React.Component<Props, State> {
 
   private resetKeyboardSpace(event: any) {
     if (!this.state.isOpenned) return;
-    let animationConfig = LayoutAnimations.EaseInOut;
+    let animationConfig = LayoutAnimations.PresetEaseInOut;
     if (Platform.OS === "ios") {
       animationConfig = LayoutAnimations.Keyboard;
     }

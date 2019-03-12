@@ -16,7 +16,8 @@ const updatePackageJson = fileName => {
     packageJson.scripts.postversion = "react-native-version";
     packageJson.scripts.resetversion =
       "react-native-version --reset-build --set-build 1";
-
+    packageJson.scripts.codepush_release =
+      "appcenter codepush release-react -a thaitanloi365/TestCodePush";
     packageJson = Object.assign(packageJson, { rnpm });
     writeFile(fileName, JSON.stringify(packageJson, null, 2));
     console.log("update package json success");

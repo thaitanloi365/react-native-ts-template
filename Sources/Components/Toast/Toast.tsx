@@ -28,12 +28,12 @@ class Toast extends React.Component<Props, State> {
   }
 
   show = () => {
-    LayoutAnimations.setLayoutAnimation(LayoutAnimations.PresetEaseInOut);
+    LayoutAnimations.setLayoutAnimation(LayoutAnimations.Toast);
     this.setState({ height: 60 });
   };
 
   hide = () => {
-    LayoutAnimations.setLayoutAnimation(LayoutAnimations.PresetEaseInOut);
+    LayoutAnimations.setLayoutAnimation(LayoutAnimations.Toast);
     this.setState({ height: 0 });
   };
 
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 15,
-    fontFamily: Assets.fontFamily.roman,
+    fontFamily: Assets.font.avenir.roman,
     color: "white"
   }
 });

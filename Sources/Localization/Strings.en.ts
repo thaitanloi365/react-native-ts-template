@@ -4,6 +4,22 @@ const auth = {
   login: "Login"
 };
 
+const codepush = {
+  later: "Later",
+  updateNow: "Update now",
+  updateLater: "Update later",
+  restartNow: "Restart now",
+  newFeatures: "A newer version is avaible.",
+  doYouWant: "Do you want to upgrade?.",
+  newestInstalled: "The newest version is installed.",
+  doYouWantUpdateNow: "Do you want to restart now ?. ",
+  madantoryUpdate: "An update version is need to upgrade.",
+  updateAvailable: "Update Available !",
+  updateAvailableContent:
+    "A newer version is available. Do you want to update ",
+  updateInstalled: "Update Installed !",
+  updateInProgress: "Update In Progress !"
+};
 const alert = {
   networkNotAvailable: "Network is not available.",
   authorizing: "Authorizing your account.",
@@ -51,5 +67,6 @@ export default {
   auth,
   alert,
   home,
-  drawer
+  drawer,
+  codepush
 };

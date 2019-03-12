@@ -16,7 +16,7 @@ const userStorageReducer = (
   state: object = initialState,
   action: {
     type: keyof typeof ActionTypes;
-    payload?: UserToken | UserProfile | UserDatabase | State;
+    payload?: State;
   }
 ) => {
   switch (action.type) {

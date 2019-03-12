@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal as RNModal, Animated } from "react-native";
+import { Modal as RNModal } from "react-native";
 import { ModalProps } from "Types";
 import Overlay from "../Overlay/Overlay";
 

@@ -12,6 +12,7 @@ const headerHeight = Device.getHeaderHeight();
 const Header: React.SFC<Props> = props => {
   const {
     style,
+    headerStyle,
     title,
     statusBarProps,
     statusBarVisible,
@@ -21,11 +22,12 @@ const Header: React.SFC<Props> = props => {
     titleContainerStyle,
     titleStyle,
     leftContainerStyle,
-    rightContainerStyle
+    rightContainerStyle,
+    children
   } = props;
 
   const defaultStyle: ViewStyle = {
-    backgroundColor,
+    backgroundColor: "yellow",
     height: headerHeight,
     flexDirection: "row",
     alignItems: "center",
@@ -33,7 +35,7 @@ const Header: React.SFC<Props> = props => {
   };
   const textStyle: TextStyle = {
     fontSize: 18,
-    fontFamily: Assets.fontFamily.medium,
+    fontFamily: Assets.font.avenir.medium,
     color: "white"
   };
 
@@ -73,9 +75,9 @@ const Header: React.SFC<Props> = props => {
   };
 
   return (
-    <View>
+    <View style={style}>
       {statusBarVisible && <StatusBar {...statusBarProps} />}
-      <View style={[defaultStyle, style]}>
+      <View style={[defaultStyle, headerStyle]}>
         <View style={[buttonCornor, { paddingLeft: 8 }, leftContainerStyle]}>
           {renderLeftComponent()}
         </View>
@@ -86,6 +88,7 @@ const Header: React.SFC<Props> = props => {
           {renderRightComponent()}
         </View>
       </View>
+      {children}
     </View>
   );
 };

@@ -11,11 +11,7 @@ type HomeStack = "Home" | "Dashboard";
 type RouteName = "Start" | "Authentication" | HomeStack;
 
 type AnimationType = "slideFromLeft" | "slideFromBottom";
-const paramsDefaultProps: ParamsDefaultProps = {
-  tabBarVisible: true,
-  swipeBackEnabled: true,
-  drawerLockMode: "unlocked"
-};
+
 type ParamsDefaultProps = {
   animationType?: AnimationType;
   tabBarVisible: boolean;
@@ -29,6 +25,8 @@ type NavigationContainer = NavigationContainerComponent | null;
 class Navigator {
   private static instance = new Navigator();
   private rootNavigator: NavigationContainer = null;
+  private drawerProps = null;
+
   constructor() {
     if (Navigator.instance) {
       throw new Error(
@@ -173,6 +171,14 @@ class Navigator {
       if (alertConfirm) alertConfirm(msg, onOk, onCancel);
     }
   };
+
+  public setDrawer(drawerProps: any) {
+    this.drawerProps = drawerProps;
+  }
+
+  public getDrawerProps(): any {
+    return this.drawerProps;
+  }
 }
 
 export default Navigator.getInstance();
