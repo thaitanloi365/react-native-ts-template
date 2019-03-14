@@ -111,7 +111,7 @@ exec("yarn tsc", (error, stdout, stderr) => {
 });
 
 console.log("👉👉👉 Reset version to 0.0.1(1) ...");
-exec("yarn resetversion", (error, stdout, stderr) => {
+exec("yarn reset_version", (error, stdout, stderr) => {
   if (error) {
     console.error(`exec error: ${error}`);
     return;
