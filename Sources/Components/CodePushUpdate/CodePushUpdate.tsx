@@ -20,6 +20,17 @@ import Button from "../Button/Button";
 const { width, height } = Dimensions.get("window");
 const dialogWidth = width - 20;
 const progressBarWidth = dialogWidth - 40;
+const isIOS = Platform.OS === "ios";
+
+const stagingKey_iOS = "Rs4a8GK_xYXgT1rM8JAD7WZGvmj8rJqX-e8vV";
+const stagingKey_android = "e90xvsrSJHJZM9EPaOfTCifnXeNEr1M4d-LPN";
+const stagingKey = isIOS ? stagingKey_iOS : stagingKey_android;
+
+const productionKey_iOS = "BVJDrKS6I9vmtcbuzV_INihwJT0UH1N80fID4";
+const productionKey_android = "GTLh_JIw3kdViaVRhtrZRxkwwYIMryKHAGUwE";
+const productionKey = isIOS ? productionKey_iOS : productionKey_android;
+
+const deploymentKey = __DEV__ ? stagingKey : productionKey;
 
 type CodePushState = "None" | "Updated" | "Syncing" | "Update";
 
@@ -39,6 +50,7 @@ type State = {
 };
 
 type StateKey = { [key in CodePushState]: string };
+
 class CodePushUpdate extends React.Component<Props, State> {
   private titles: StateKey = {
     None: Strings.codepush.updateAvailable,
@@ -46,6 +58,11 @@ class CodePushUpdate extends React.Component<Props, State> {
     Update: Strings.codepush.updateAvailable,
     Updated: Strings.codepush.updateInstalled
   };
+
+  static defaultProps: Props = {
+    deploymentKey
+  };
+
   state: State = {
     updateInfo: null,
     isMandatory: false,
@@ -180,14 +197,18 @@ class CodePushUpdate extends React.Component<Props, State> {
   private codePushDownloadDidProgress(progress: DownloadProgress) {
     console.log("------- CodePush codePushDownloadDidProgress -------");
     console.log(progress);
-    const { state, animatedProgressValue } = this.state;
+    const { state, animatedProgressValue, isMandatory } = this.state;
     if (state === "Syncing") {
       const { receivedBytes, totalBytes } = progress;
       let temp = receivedBytes / totalBytes;
       this.setState({ currentProgress: temp }, () => {
         if (temp >= 1) {
           console.log("------- CodePush download done -------");
-          this.setState({ state: "Updated" });
+          if (isMandatory) {
+            this.hide();
+          } else {
+            this.setState({ state: "Updated" });
+          }
         } else {
           animatedProgressValue.setValue(temp);
         }
@@ -204,7 +225,11 @@ class CodePushUpdate extends React.Component<Props, State> {
     return null;
   };
 
-  private restartNow = () => CodePush.restartApp();
+  private restartNow = () => {
+    this.setState({ state: "None" }, () => {
+      CodePush.restartApp();
+    });
+  };
 
   private renderBottom = () => {
     const { state, isMandatory } = this.state;

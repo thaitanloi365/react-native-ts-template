@@ -76,7 +76,7 @@ class Touchable extends React.Component<Props, State> {
 
     return (
       <View
-        style={[style, { borderRadius }]}
+        style={[styles.container, style, { borderRadius }]}
         onLayout={onLayout}
         hitSlop={hitSlop}
       >
@@ -97,6 +97,9 @@ class Touchable extends React.Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "transparent"
+  },
   button: {
     backgroundColor: "transparent"
   },

@@ -53,7 +53,7 @@ export class App extends React.Component {
           <Loading ref={this.loadingRef} />
           <Alert ref={this.alertRef} />
           <NetInfo />
-          <CodePushUpdate deploymentKey="" />
+          <CodePushUpdate />
         </PersistGate>
       </Provider>
     );

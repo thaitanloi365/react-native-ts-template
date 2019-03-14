@@ -13,11 +13,16 @@ const updatePackageJson = fileName => {
       "adb reverse tcp:8081 tcp:8081 & react-native run-android";
     packageJson.scripts.shake = "adb shell input keyevent 82";
     packageJson.scripts.ios = "react-native run-ios";
-    packageJson.scripts.postversion = "react-native-version";
-    packageJson.scripts.resetversion =
+    packageJson.scripts.post_version = "react-native-version";
+    packageJson.scripts.reset_version =
       "react-native-version --reset-build --set-build 1";
     packageJson.scripts.codepush_release =
-      "appcenter codepush release-react -a thaitanloi365/TestCodePush";
+      "appcenter codepush release-react -a thaitanloi365/MyApp";
+    packageJson.scripts.codepush_add_staging = `appcenter codepush deployment add -a thaitanloi365/${name}-iOS Staging`;
+    packageJson.scripts.codepush_create_android = `appcenter apps create -d ${name}-Android -o Android -p React-Native`;
+    packageJson.scripts.codepush_create_ios = `appcenter apps create -d ${name}-iOS -o iOS -p React-Native`;
+    packageJson.scripts.codepush_list_deployment = `appcenter codepush deployment list -a thaitanloi365/${name} -k`;
+
     packageJson = Object.assign(packageJson, { rnpm });
     writeFile(fileName, JSON.stringify(packageJson, null, 2));
     console.log("update package json success");
