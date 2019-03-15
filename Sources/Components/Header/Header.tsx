@@ -27,7 +27,7 @@ const Header: React.SFC<Props> = props => {
   } = props;
 
   const defaultStyle: ViewStyle = {
-    backgroundColor: "yellow",
+    backgroundColor,
     height: headerHeight,
     flexDirection: "row",
     alignItems: "center",

@@ -3,7 +3,8 @@ import { persistStore } from "redux-persist";
 import { middlewares } from "./Middleware";
 import { initialState, reducer } from "./Reducer";
 
-type StoreState = typeof initialState;
+export type StoreState = typeof initialState;
+
 const store = createStore(
   reducer,
   { appConfiguration: undefined, userStorage: undefined },
