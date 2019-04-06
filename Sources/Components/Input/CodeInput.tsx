@@ -1,32 +1,34 @@
-import React from "react";
+import React from 'react'
 import {
   View,
   StyleSheet,
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
-  TextInputFocusEventData
-} from "react-native";
-import { CodeInputProps } from "Types";
-import TextInput from "../Input/TextInput";
+  TextInputFocusEventData,
+} from 'react-native'
+import { CodeInputProps } from '@Types'
+import TextInput from '../Input/TextInput'
 
-type Props = CodeInputProps;
+type Props = CodeInputProps
 type State = {
-  lastIndex: number;
-  currentIndex: number;
-  texts: string[];
-};
+  lastIndex: number
+  currentIndex: number
+  texts: string[]
+  submited: boolean
+}
 
 class CodeInput extends React.Component<Props, State> {
-  private inputRefs: TextInput[] = [];
+  private inputRefs: TextInput[] = []
 
   constructor(props: Props) {
-    super(props);
-    const { numberInputs } = props;
+    super(props)
+    const { numberInputs } = props
     this.state = {
-      texts: new Array(numberInputs).fill(""),
+      texts: new Array(numberInputs).fill(''),
       lastIndex: 0,
-      currentIndex: -1
-    };
+      currentIndex: -1,
+      submited: false,
+    }
   }
 
   static defaultProps: Props = {
@@ -35,61 +37,76 @@ class CodeInput extends React.Component<Props, State> {
     width: 50,
     height: 50,
     inputBorderRadius: 4,
-    activeBorderColor: "blue",
+    activeBorderColor: 'blue',
     activeBorderWidth: 2,
-    deactiveBorderColor: "black",
+    deactiveBorderColor: 'black',
     deactiveBorderWidth: 1,
     fontSize: 20,
-    secureTextEntry: true
-  };
+    secureTextEntry: true,
+  }
 
   focusInput(atIndex: number) {
-    const input = this.inputRefs[atIndex];
-    if (input) input.focus();
+    const input = this.inputRefs[atIndex]
+    if (input) input.focus()
   }
 
   getText = () => {
-    return this.state.texts.toString();
-  };
+    return this.state.texts.join('').toString()
+  }
 
   clearText = () => {
-    if (this.inputRefs.length < 1) return;
+    if (this.inputRefs.length < 1) return
     this.setState({ texts: [] }, () => {
-      this.inputRefs.forEach(input => input.clearText());
-    });
-  };
+      this.inputRefs.forEach(input => input.clearText())
+    })
+  }
 
   private onTextChange = (index: number, text: string) => {
-    const { numberInputs, onTextChanged } = this.props;
-    let texts = this.state.texts;
-    texts[index] = text;
-    if (text !== "") {
+    const { numberInputs, onTextChanged, onSubmit } = this.props
+    let texts = this.state.texts
+    texts[index] = text
+    if (text !== '') {
       if (index == numberInputs - 1) {
+        if (onSubmit && texts.length === numberInputs) {
+          const currentIndexRef = this.inputRefs[index]
+          if (currentIndexRef) {
+            currentIndexRef.blur()
+            this.setState({ submited: true })
+          }
+
+          const result = this.getText()
+          onSubmit(result)
+        }
       } else {
-        const nextInputRef = this.inputRefs[index + 1];
-        if (nextInputRef) nextInputRef.focus();
+        const nextInputRef = this.inputRefs[index + 1]
+        if (nextInputRef) {
+          nextInputRef.focus()
+          if (this.state.submited) {
+            this.setState({ submited: false })
+          }
+        }
       }
     }
 
     this.setState({ texts }, () => {
-      const text = texts.join("");
-      if (onTextChanged) onTextChanged(text);
-    });
-  };
+      const text = texts.join('')
+      if (onTextChanged) onTextChanged(text)
+    })
+  }
 
   private onBackSpacePress = (index: number) => {
     if (index > 0) {
-      const currentText = this.state.texts[index];
-      if (currentText === "") {
-        const nextInputRef = this.inputRefs[index - 1];
-        if (nextInputRef) nextInputRef.focus();
+      const currentText = this.state.texts[index]
+      if (currentText === '') {
+        const nextInputRef = this.inputRefs[index - 1]
+        if (nextInputRef) nextInputRef.focus()
       }
     }
-  };
+  }
 
   private onFocus = (index: number) => {
-    this.setState({ currentIndex: index });
-  };
+    this.setState({ currentIndex: index })
+  }
 
   private renderInputs = () => {
     const {
@@ -106,74 +123,75 @@ class CodeInput extends React.Component<Props, State> {
       deactiveBorderColor,
       deactiveBorderWidth,
       inputBorderRadius,
-      keyboardType
-    } = this.props;
+      keyboardType,
+    } = this.props
 
-    const { currentIndex } = this.state;
-    const inputStyle = {
+    const { currentIndex, submited } = this.state
+    const inputStyle: any = {
       fontFamily,
       fontSize,
-      width: width,
-      height: height,
-      textAlign: "center"
-    };
+      textAlign: 'center',
+    }
     const inputs = Array.apply(null, Array(numberInputs)).map((_, index) => {
-      const containerInputStyle = {
+      const shuoldChange = index === currentIndex && submited === false
+      const containerInputStyle: any = {
+        width,
+        height,
+        justifyContent: 'center',
+        alignItems: 'center',
         marginHorizontal: spacing! / 2,
-        borderColor:
-          index === currentIndex ? activeBorderColor : deactiveBorderColor,
-        borderWidth:
-          index === currentIndex ? activeBorderWidth : deactiveBorderWidth,
-        borderRadius: inputBorderRadius
-      };
+        borderColor: shuoldChange ? activeBorderColor : deactiveBorderColor,
+        borderWidth: shuoldChange ? activeBorderWidth : deactiveBorderWidth,
+        borderRadius: inputBorderRadius,
+      }
 
-      const id = `input${index}`;
+      const id = `input${index}`
 
       const onChangeText = (text: string) => {
-        this.onTextChange(index, text);
-      };
+        this.onTextChange(index, text)
+      }
 
-      const onKeyPress = (
-        e: NativeSyntheticEvent<TextInputKeyPressEventData>
-      ) => {
-        if (e.nativeEvent.key === "Backspace") {
-          this.onBackSpacePress(index);
+      const onKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        if (e.nativeEvent.key === 'Backspace') {
+          this.onBackSpacePress(index)
         }
-      };
+      }
 
       const onFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-        this.onFocus(index);
-      };
+        this.onFocus(index)
+      }
 
       return (
         <TextInput
+          style={containerInputStyle}
           key={id}
           ref={r => {
-            if (r) this.inputRefs[index] = r;
+            if (r) this.inputRefs[index] = r
           }}
           returnKeyType={returnKeyType}
           secureTextEntry={secureTextEntry}
           keyboardType={keyboardType}
           maxLength={1}
-          inputStyle={StyleSheet.flatten([inputStyle, containerInputStyle])}
+          inputStyle={inputStyle}
           onChangeText={onChangeText}
           onKeyPress={onKeyPress}
           onFocus={onFocus}
-          underlineColor="transparent"
+          underlineWidth={0}
         />
-      );
-    });
-    return inputs;
-  };
+      )
+    })
+    return inputs
+  }
   render() {
-    const { style } = this.props;
-    return <View style={[styles.container, style]}>{this.renderInputs()}</View>;
+    const { style } = this.props
+    return <View style={[styles.container, style]}>{this.renderInputs()}</View>
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row"
-  }
-});
-export default CodeInput;
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+})
+export default CodeInput

@@ -1,3 +1,7 @@
 export type AppConfiguration = {
-  appVersion: string;
-};
+  codePushVersion: string
+  firstStart: boolean
+  language: LanguageType
+}
+
+export type LanguageType = 'vi' | 'en'

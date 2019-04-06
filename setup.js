@@ -2,6 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const splashscreen = require("./scripts/splash_screen/splashScreen");
 const { name } = require("./app.json");
+const iosAppName = `thaitanloi365/${name}-iOS`;
+const androidAppName = `thaitanloi365/${name}-Android`;
 const updatePackageJson = fileName => {
   try {
     let packageJson = require(path.resolve(__dirname, fileName));
@@ -9,19 +11,23 @@ const updatePackageJson = fileName => {
       assets: ["Sources/Assets/Fonts"]
     };
     packageJson.scripts.tsc = "tsc";
-    packageJson.scripts.android =
-      "adb reverse tcp:8081 tcp:8081 & react-native run-android";
+    packageJson.scripts.android = "adb reverse tcp:8081 tcp:8081 & react-native run-android";
     packageJson.scripts.shake = "adb shell input keyevent 82";
     packageJson.scripts.ios = "react-native run-ios";
-    packageJson.scripts.post_version = "react-native-version";
-    packageJson.scripts.reset_version =
-      "react-native-version --reset-build --set-build 1";
-    packageJson.scripts.codepush_release =
-      "appcenter codepush release-react -a thaitanloi365/MyApp";
-    packageJson.scripts.codepush_add_staging = `appcenter codepush deployment add -a thaitanloi365/${name}-iOS Staging`;
-    packageJson.scripts.codepush_create_android = `appcenter apps create -d ${name}-Android -o Android -p React-Native`;
-    packageJson.scripts.codepush_create_ios = `appcenter apps create -d ${name}-iOS -o iOS -p React-Native`;
-    packageJson.scripts.codepush_list_deployment = `appcenter codepush deployment list -a thaitanloi365/${name} -k`;
+    packageJson.scripts.post_version = "react-native-version --increment-build --never-amend";
+    packageJson.scripts.reset_version = "react-native-version --reset-build --set-build 1";
+    packageJson.codepush_release_staging_ios = `appcenter codepush release-react -a ${iosAppName} -d Staging`;
+    packageJson.codepush_release_production_ios = `appcenter codepush release-react -a ${iosAppName} -d Production`;
+    packageJson.codepush_release_staging_android = `appcenter codepush release-react -a ${androidAppName} -d Staging`;
+    packageJson.codepush_release_production_android = `appcenter codepush release-react -a ${androidAppName} -d Production`;
+    packageJson.codepush_add_staging_ios = `appcenter codepush deployment add -a ${iosAppName} Staging`;
+    packageJson.codepush_add_production_ios = `appcenter codepush deployment add -a ${iosAppName} Production`;
+    packageJson.codepush_add_staging_android = `appcenter codepush deployment add -a ${androidAppName} Staging`;
+    packageJson.codepush_add_production_android = `appcenter codepush deployment add -a ${androidAppName} Production`;
+    packageJson.codepush_create_ios = `appcenter apps create -d ThePark-Android -o Android -p React-Native`;
+    packageJson.codepush_create_android = `appcenter apps create -d ThePark-iOS -o iOS -p React-Native`;
+    packageJson.codepush_list_deployment_ios = `appcenter codepush deployment list -a ${iosAppName} -k`;
+    packageJson.codepush_list_deployment_android = `appcenter codepush deployment list -a ${androidAppName} -k`;
 
     packageJson = Object.assign(packageJson, { rnpm });
     writeFile(fileName, JSON.stringify(packageJson, null, 2));
@@ -39,8 +45,7 @@ const deleteFile = fileName => {
   }
 };
 
-const writeFile = (fileName, data) =>
-  fs.writeFileSync(path.join(__dirname, fileName), data);
+const writeFile = (fileName, data) => fs.writeFileSync(path.join(__dirname, fileName), data);
 
 const moveFile = (oldPath, newPath) => {
   fs.rename(oldPath, newPath, function(err) {
@@ -89,10 +94,7 @@ deleteFile(".flowconfig");
 deleteFile("App.js");
 deleteFile("setup.js");
 deleteFile("README.md");
-moveFile(
-  path.join(__dirname, "app.json"),
-  path.join(__dirname, "Sources/App/app.json")
-);
+moveFile(path.join(__dirname, "app.json"), path.join(__dirname, "Sources/App/app.json"));
 
 updatePackageJson("package.json");
 splashscreen.install();

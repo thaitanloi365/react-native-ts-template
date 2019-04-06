@@ -1,39 +1,26 @@
-import Network from "../Network/Network";
-export type NetworkPromiseResponse<T> = Promise<T>;
+import Network from '../Network/Network'
 
-function login<T>(email: string, password: string): NetworkPromiseResponse<T> {
-  const body = { email, password };
-  return new Promise((resolve, reject) => {
-    Network.unAuthorizedRequest<T>("/app/api/login", "POST", body)
-      .then(response => {
-        console.log("response", response);
-        const data = response.data;
-        resolve(data);
-      })
-      .catch(error => {
-        console.warn(error);
-        reject("Login failed");
-      });
-  });
+async function login<T>(email: string, password: string) {
+  try {
+    const body = { email, password }
+    const response = await Network.unAuthorizedRequest<T>('/app/api/login', 'POST', body)
+    return response.data
+  } catch (error) {
+    return error
+  }
 }
 
-function extendToken<T>(token: string): NetworkPromiseResponse<T> {
-  const body = { token };
-  return new Promise((resolve, reject) => {
-    Network.unAuthorizedRequest<T>("/app/api/login", "POST", body)
-      .then(response => {
-        console.log("response", response);
-        const data = response.data;
-        resolve(data);
-      })
-      .catch(error => {
-        console.warn(error);
-        reject("Login failed");
-      });
-  });
+async function extendToken<T>(token: string) {
+  try {
+    const body = { token }
+    const response = await Network.unAuthorizedRequest<T>('/app/api/login', 'POST', body)
+    return response.data
+  } catch (error) {
+    return error
+  }
 }
 
 export default {
   login,
-  extendToken
-};
+  extendToken,
+}

@@ -1,303 +1,290 @@
-import React from "react";
+import React from 'react'
 import {
   View,
   TextInput as RNTextInput,
   Platform,
   StyleSheet,
   GestureResponderEvent,
-  Animated
-} from "react-native";
-import { TextInputValidateType, MaterialTextInputProps } from "Types";
-import { Validator } from "Utils";
-import Text from "../Text/Text";
-import Assets from "Assets";
+  Animated,
+} from 'react-native'
+import { TextInputValidateType, MaterialTextInputProps } from '@Types'
+import { Validator } from '@Utils'
+import Text from '../Text/Text'
+import Assets from '@Assets'
 
-type Props = MaterialTextInputProps;
+type Props = MaterialTextInputProps
 
 type State = {
-  text: string;
-  shuoldChangeColor?: boolean;
-  animatedTextTransform: Animated.Value;
-  animatedUnderline: Animated.Value;
-  animatedErrorText: Animated.Value;
-  currentErrorState: TextInputValidateType;
-  currentErrorMessage: string;
-};
+  text: string
+  shuoldChangeColor?: boolean
+  animatedTextTransform: Animated.Value
+  animatedUnderline: Animated.Value
+  animatedErrorText: Animated.Value
+  currentErrorState: TextInputValidateType
+  currentErrorMessage: string
+}
 
 class MaterialTextInput extends React.Component<Props, State> {
-  private textInputRef = React.createRef<RNTextInput>();
+  private textInputRef = React.createRef<RNTextInput>()
 
   static defaultProps: Props = {
-    validateTypes: [
-      { type: "empty", errorText: "This field shuold not be empty" }
-    ]
-  };
+    validateTypes: [{ type: 'empty', errorText: 'This field shuold not be empty' }],
+  }
 
   constructor(props: Props) {
-    super(props);
-    console.log("props.minLength", props.minLength);
+    super(props)
+    console.log('props.minLength', props.minLength)
     this.state = {
-      text: props.defaultValue || "",
+      text: props.defaultValue || '',
       animatedTextTransform: new Animated.Value(1),
       animatedErrorText: new Animated.Value(0),
       animatedUnderline: new Animated.Value(0),
       shuoldChangeColor: false,
-      currentErrorState: "none",
-      currentErrorMessage: ""
-    };
+      currentErrorState: 'none',
+      currentErrorMessage: '',
+    }
   }
 
   setNativeProps = (props: object) => {
     if (this.textInputRef.current) {
-      this.textInputRef.current.setNativeProps(props);
+      this.textInputRef.current.setNativeProps(props)
     }
-  };
+  }
 
   focus = () => {
     if (this.textInputRef.current) {
       if (!this.textInputRef.current.isFocused()) {
-        this.textInputRef.current.focus();
+        this.textInputRef.current.focus()
       }
     }
-  };
+  }
 
   clearText = () => {
-    this.setState({ text: "" }, () => {
-      if (this.textInputRef.current) this.textInputRef.current.clear();
-    });
-  };
+    this.setState({ text: '' }, () => {
+      if (this.textInputRef.current) this.textInputRef.current.clear()
+    })
+  }
 
   getText = () => {
-    return this.state.text;
-  };
+    return this.state.text
+  }
 
   private renderRightComponent = () => {
-    const { RightComponent } = this.props;
-    if (RightComponent && React.isValidElement(RightComponent))
-      return RightComponent;
+    const { RightComponent } = this.props
+    if (RightComponent && React.isValidElement(RightComponent)) return RightComponent
 
-    if (RightComponent && typeof RightComponent === "function") {
-      const c: Function = RightComponent;
-      return c();
+    if (RightComponent && typeof RightComponent === 'function') {
+      const c: Function = RightComponent
+      return c()
     }
-    return null;
-  };
+    return null
+  }
 
   private onStartShouldSetResponder = (e: GestureResponderEvent) => {
-    this.focus();
-    return true;
-  };
+    this.focus()
+    return true
+  }
 
   private onTextChanged = (text: string) => {
     this.setState({ text }, () => {
       if (this.props.onChangeText) {
-        this.props.onChangeText(text);
+        this.props.onChangeText(text)
       }
-      if (this.state.currentErrorState !== "none") {
-        this.setState({ currentErrorState: "none" }, () => {
+      if (this.state.currentErrorState !== 'none') {
+        this.setState({ currentErrorState: 'none' }, () => {
           Animated.timing(this.state.animatedErrorText, {
             toValue: 0,
-            duration: 250
-          }).start();
-        });
+            duration: 250,
+          }).start()
+        })
       }
-    });
-  };
+    })
+  }
 
   private setError(text: string, errorType: TextInputValidateType) {
-    const { focusOnError, onShouldReturn, validateTypes } = this.props;
+    const { focusOnError, onShouldReturn, validateTypes } = this.props
     if (Array.isArray(validateTypes) && validateTypes.length > 0) {
-      const item = validateTypes.find(item => item.type === errorType);
+      const item = validateTypes.find(item => item.type === errorType)
       if (item) {
-        const currentErrorMessage = item.errorText;
-        this.setState(
-          { currentErrorState: errorType, currentErrorMessage },
-          () => {
-            Animated.timing(this.state.animatedErrorText, {
-              toValue: 1,
-              duration: 250
-            }).start(() => {
-              if (onShouldReturn) onShouldReturn(text, errorType);
-              if (focusOnError) this.focus();
-            });
-          }
-        );
+        const currentErrorMessage = item.errorText
+        this.setState({ currentErrorState: errorType, currentErrorMessage }, () => {
+          Animated.timing(this.state.animatedErrorText, {
+            toValue: 1,
+            duration: 250,
+          }).start(() => {
+            if (onShouldReturn) onShouldReturn(text, errorType)
+            if (focusOnError) this.focus()
+          })
+        })
       }
     }
   }
 
   private onFocus = () => {
-    const { text, currentErrorState } = this.state;
-    if (text === "") {
-      if (currentErrorState === "none") {
+    const { text, currentErrorState } = this.state
+    if (text === '') {
+      if (currentErrorState === 'none') {
         Animated.parallel([
           Animated.timing(this.state.animatedTextTransform, {
             toValue: 0,
-            duration: 250
+            duration: 250,
           }),
           Animated.timing(this.state.animatedUnderline, {
             toValue: 1,
-            duration: 250
+            duration: 250,
           }),
           Animated.timing(this.state.animatedErrorText, {
             toValue: 0,
-            duration: 250
-          })
-        ]).start();
+            duration: 250,
+          }),
+        ]).start()
       }
     } else {
       Animated.timing(this.state.animatedUnderline, {
         toValue: 1,
-        duration: 250
-      }).start();
+        duration: 250,
+      }).start()
     }
-  };
+  }
 
   private onBlur = () => {
-    const { text } = this.state;
-    const { minLength, validateTypes, onShouldReturn } = this.props;
-    if (text === "") {
-      this.setError(text, "empty");
+    const { text } = this.state
+    const { minLength, validateTypes, onShouldReturn } = this.props
+    if (text === '') {
+      this.setError(text, 'empty')
     } else {
       if (minLength && text.length < minLength) {
-        this.setError(text, "length");
+        this.setError(text, 'length')
       } else {
         if (Array.isArray(validateTypes) && validateTypes.length > 0) {
-          const { regex } = this.props;
-          let item = validateTypes.find(item => item.type === "email");
+          const { regex } = this.props
+          let item = validateTypes.find(item => item.type === 'email')
           if (item) {
-            let isEmail = false;
+            let isEmail = false
             if (regex) {
-              isEmail = regex.test(text);
+              isEmail = regex.test(text)
             } else {
-              isEmail = Validator.isEmail(text);
+              isEmail = Validator.isEmail(text)
             }
             if (!isEmail) {
-              this.setError(text, "email");
-              return;
+              this.setError(text, 'email')
+              return
             }
           }
 
-          item = validateTypes.find(item => item.type === "phone");
+          item = validateTypes.find(item => item.type === 'phone')
           if (item) {
-            let isPhone = false;
+            let isPhone = false
             if (regex) {
-              isPhone = regex.test(text);
+              isPhone = regex.test(text)
             } else {
-              isPhone = Validator.isPhoneNumber(text);
+              isPhone = Validator.isPhoneNumber(text)
             }
             if (!isPhone) {
-              this.setError(text, "phone");
-              return;
+              this.setError(text, 'phone')
+              return
             }
           }
 
-          item = validateTypes.find(item => item.type === "regex");
+          item = validateTypes.find(item => item.type === 'regex')
           if (item && regex) {
-            const isValid = regex.test(text);
+            const isValid = regex.test(text)
             if (!isValid) {
-              this.setError(text, "regex");
-              return;
+              this.setError(text, 'regex')
+              return
             }
           }
 
           Animated.parallel([
             Animated.timing(this.state.animatedUnderline, {
               toValue: 0,
-              duration: 250
+              duration: 250,
             }),
             Animated.timing(this.state.animatedErrorText, {
               toValue: 0,
-              duration: 250
-            })
+              duration: 250,
+            }),
           ]).start(() => {
-            if (onShouldReturn) onShouldReturn(text, "none");
-          });
+            if (onShouldReturn) onShouldReturn(text, 'none')
+          })
         }
       }
     }
-  };
+  }
 
   private getHelperTextAnimation() {
-    const { animatedTextTransform, animatedUnderline } = this.state;
-    const {
-      placeholderDeactiveColor = "black",
-      activeColor = Assets.colors.primary
-    } = this.props;
+    const { animatedTextTransform, animatedUnderline } = this.state
+    const { placeholderDeactiveColor = 'black', activeColor = Assets.colors.primary } = this.props
 
-    const height = 40;
+    const height = 40
 
     const translateY = animatedTextTransform.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, height / 2]
-    });
+      outputRange: [0, height / 2],
+    })
 
     const translateX = animatedTextTransform.interpolate({
       inputRange: [0, 1],
-      outputRange: [-height / 2 - 4, 4]
-    });
+      outputRange: [-height / 2 - 4, 4],
+    })
 
     const scale = animatedTextTransform.interpolate({
       inputRange: [0, 1],
-      outputRange: [0.8, 1]
-    });
+      outputRange: [0.8, 1],
+    })
 
     const color = animatedUnderline.interpolate({
       inputRange: [0, 0.5, 1],
-      outputRange: [
-        placeholderDeactiveColor,
-        placeholderDeactiveColor,
-        activeColor
-      ]
-    });
+      outputRange: [placeholderDeactiveColor, placeholderDeactiveColor, activeColor],
+    })
     const animationStyle = {
       color,
-      transform: [{ translateY }, { translateX }, { scale: scale }]
-    };
-    return animationStyle;
+      transform: [{ translateY }, { translateX }, { scale: scale }],
+    }
+    return animationStyle
   }
 
   private getUnderlineAnimationStyle() {
-    const { animatedUnderline } = this.state;
+    const { animatedUnderline } = this.state
     const {
-      underlineColor = "black",
+      underlineColor = 'black',
       underlineWidth = StyleSheet.hairlineWidth,
-      activeColor = Assets.colors.primary
-    } = this.props;
+      activeColor = Assets.colors.primary,
+    } = this.props
     const width = animatedUnderline.interpolate({
       inputRange: [0, 1],
-      outputRange: [underlineWidth, 2 * underlineWidth]
-    });
+      outputRange: [underlineWidth, 2 * underlineWidth],
+    })
 
     const color = animatedUnderline.interpolate({
       inputRange: [0, 0.2, 1],
-      outputRange: [underlineColor, activeColor, activeColor]
-    });
+      outputRange: [underlineColor, activeColor, activeColor],
+    })
 
     const animationStyle = {
       borderBottomColor: color,
-      borderBottomWidth: width
-    };
-    return animationStyle;
+      borderBottomWidth: width,
+    }
+    return animationStyle
   }
 
   private getErrorTextAnimation() {
-    const { animatedErrorText } = this.state;
+    const { animatedErrorText } = this.state
     const opacity = animatedErrorText.interpolate({
       inputRange: [0, 0.2, 1],
-      outputRange: [0, 0, 1]
-    });
+      outputRange: [0, 0, 1],
+    })
     const scale = animatedErrorText.interpolate({
       inputRange: [0, 0.8, 0.9, 1],
-      outputRange: [0, 1, 1.1, 1]
-    });
+      outputRange: [0, 1, 1.1, 1],
+    })
 
     const animationStyle = {
       opacity,
-      transform: [{ scale }]
-    };
+      transform: [{ scale }],
+    }
 
-    return animationStyle;
+    return animationStyle
   }
 
   render() {
@@ -324,55 +311,46 @@ class MaterialTextInput extends React.Component<Props, State> {
       inputContainerStyle,
       indicatorTextStyle,
       errorTextStyle,
-      maxLength
-    } = this.props;
+      maxLength,
+    } = this.props
 
-    const hiddenUnderline = multiline || underlineWidth == 0;
-    let underlineStyle = {};
+    const hiddenUnderline = multiline || underlineWidth == 0
+    let underlineStyle = {}
     if (!hiddenUnderline) {
       underlineStyle = {
-        borderBottomColor: underlineWidth
-          ? underlineColor || "black"
-          : undefined,
-        borderBottomWidth: underlineWidth || StyleSheet.hairlineWidth
-      };
+        borderBottomColor: underlineWidth ? underlineColor || 'black' : undefined,
+        borderBottomWidth: underlineWidth || StyleSheet.hairlineWidth,
+      }
     }
 
     const defaultStyle: any = {
       ...Platform.select({
         android: {
           paddingVertical: 0,
-          textAlignVertical: multiline ? "top" : "auto"
-        }
-      })
-    };
-
-    const inputContainer: any = [
-      { flexDirection: "row", alignItems: "center" },
-      inputContainerStyle
-    ];
-
-    let valueTextLength = "";
-    if (maxLength) {
-      const length = this.state.text.length;
-      valueTextLength = `${length} / ${maxLength}`;
+          textAlignVertical: multiline ? 'top' : 'auto',
+        },
+      }),
     }
 
-    const textAnimationStyle = this.getHelperTextAnimation();
-    const underlineAnimationStyle = this.getUnderlineAnimationStyle();
-    const errorTextAnimationStyle = this.getErrorTextAnimation();
+    const inputContainer: any = [
+      { flexDirection: 'row', alignItems: 'center' },
+      inputContainerStyle,
+    ]
+
+    let valueTextLength = ''
+    if (maxLength) {
+      const length = this.state.text.length
+      valueTextLength = `${length} / ${maxLength}`
+    }
+
+    const textAnimationStyle = this.getHelperTextAnimation()
+    const underlineAnimationStyle = this.getUnderlineAnimationStyle()
+    const errorTextAnimationStyle = this.getErrorTextAnimation()
 
     return (
-      <View
-        style={[style]}
-        onStartShouldSetResponder={this.onStartShouldSetResponder}
-      >
-        <Animated.Text style={[helperStyle, textAnimationStyle]}>
-          {placeholder}
-        </Animated.Text>
-        <Animated.View
-          style={[inputContainer, underlineStyle, underlineAnimationStyle]}
-        >
+      <View style={[style]} onStartShouldSetResponder={this.onStartShouldSetResponder}>
+        <Animated.Text style={[helperStyle, textAnimationStyle]}>{placeholder}</Animated.Text>
+        <Animated.View style={[inputContainer, underlineStyle, underlineAnimationStyle]}>
           <RNTextInput
             ref={this.textInputRef}
             style={[styles.input, defaultStyle, inputStyle]}
@@ -390,7 +368,7 @@ class MaterialTextInput extends React.Component<Props, State> {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             underlineColorAndroid="transparent"
-            autoCapitalize={autoCapitalize || "none"}
+            autoCapitalize={autoCapitalize || 'none'}
             autoCorrect={false}
             editable={editable}
             multiline={multiline}
@@ -400,46 +378,41 @@ class MaterialTextInput extends React.Component<Props, State> {
           {this.renderRightComponent()}
         </Animated.View>
         <View style={styles.row}>
-          <Animated.Text
-            style={[styles.error, errorTextStyle, errorTextAnimationStyle]}
-          >
+          <Animated.Text style={[styles.error, errorTextStyle, errorTextAnimationStyle]}>
             {this.state.currentErrorMessage}
           </Animated.Text>
           {maxLength && (
-            <Text
-              text={valueTextLength}
-              style={[styles.indicator, indicatorTextStyle]}
-            />
+            <Text text={valueTextLength} style={[styles.indicator, indicatorTextStyle]} />
           )}
         </View>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   row: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center"
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
     paddingBottom: 4,
     paddingLeft: 4,
     flex: 1,
     fontSize: 16,
-    color: "black",
-    fontFamily: Assets.font.avenir.roman
+    color: 'black',
+    fontFamily: Assets.font.avenir.roman,
   },
   indicator: {
     fontSize: 14,
-    color: "black",
-    fontFamily: Assets.font.avenir.roman
+    color: 'black',
+    fontFamily: Assets.font.avenir.roman,
   },
   error: {
     fontSize: 14,
-    color: "#ff0000",
-    fontFamily: Assets.font.avenir.roman
-  }
-});
-export default MaterialTextInput;
+    color: '#ff0000',
+    fontFamily: Assets.font.avenir.roman,
+  },
+})
+export default MaterialTextInput

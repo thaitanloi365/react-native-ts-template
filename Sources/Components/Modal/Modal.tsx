@@ -1,45 +1,41 @@
-import React from "react";
-import { Modal as RNModal } from "react-native";
-import { ModalProps } from "Types";
-import Overlay from "../Overlay/Overlay";
+import React from 'react'
+import { Modal as RNModal } from 'react-native'
+import { ModalProps } from '@Types'
+import Overlay from '../Overlay/Overlay'
 
-type Props = ModalProps;
-type State = { visible: boolean };
+type Props = ModalProps
+type State = { visible: boolean }
 class Modal extends React.Component<Props, State> {
-  private onHide?: () => void;
-  private overlayRef = React.createRef<Overlay>();
+  private onHide?: () => void
+  private overlayRef = React.createRef<Overlay>()
 
   state: State = {
-    visible: false
-  };
+    visible: false,
+  }
 
   show = (onShow?: () => void) => {
     this.setState({ visible: true }, () => {
       if (this.overlayRef.current) {
-        this.overlayRef.current.show(onShow);
+        this.overlayRef.current.show(onShow)
       }
-    });
-  };
+    })
+  }
 
   hide = (onHide?: () => void) => {
     if (this.overlayRef.current) {
-      this.onHide = onHide;
-      this.overlayRef.current.hide(() => this.setState({ visible: false }));
+      this.onHide = onHide
+      this.overlayRef.current.hide(() => this.setState({ visible: false }))
     }
-  };
-
-  shouldComponentUpdate(nextProps: Props, nextState: State) {
-    return this.state.visible !== nextState.visible;
   }
 
   private onRequestClose = () => {
     if (this.props.closeOnBackAndroid) {
-      this.hide();
+      this.hide()
     }
-  };
+  }
 
   render() {
-    const { children, ...overlayProps } = this.props;
+    const { children, ...overlayProps } = this.props
 
     return (
       <RNModal
@@ -53,8 +49,8 @@ class Modal extends React.Component<Props, State> {
           {children}
         </Overlay>
       </RNModal>
-    );
+    )
   }
 }
 
-export default Modal;
+export default Modal

@@ -1,8 +1,15 @@
-import { Dimensions, Platform, StatusBar } from "react-native";
+import { Dimensions, Platform, StatusBar, PixelRatio } from "react-native";
+
+const { width, height } = Dimensions.get("window");
 
 const _isAndroid = Platform.OS == "android";
 const _version = Platform.Version;
-const { width, height } = Dimensions.get("window");
+
+const _pixelDensity = PixelRatio.get();
+const _adjustedWidth = width * _pixelDensity;
+const _adjustedHeight = height * _pixelDensity;
+
+type DeviceType = "Phone" | "Tablet";
 
 function isAndroid(): boolean {
   return _isAndroid;
@@ -23,7 +30,7 @@ function isIphoneX() {
   );
 }
 
-function ifIphoneX(iphoneXStyle: number, regularStyle: number) {
+function ifIphoneX(iphoneXStyle: any, regularStyle: any) {
   if (isIphoneX()) {
     return iphoneXStyle;
   }
@@ -42,6 +49,22 @@ function getHeaderHeight() {
   return headerHeight;
 }
 
+function deviceType(): DeviceType {
+  let type: DeviceType = "Phone";
+  if (
+    _pixelDensity < 2 &&
+    (_adjustedWidth >= 1000 || _adjustedHeight >= 1000)
+  ) {
+    type = "Tablet";
+  } else if (
+    _pixelDensity === 2 &&
+    (_adjustedWidth >= 1920 || _adjustedHeight >= 1920)
+  ) {
+    type = "Tablet";
+  }
+  return type;
+}
+
 export default {
   getScreenSize,
   isAndroid,
@@ -49,5 +72,8 @@ export default {
   getStatusBarHeight,
   getHeaderHeight,
   width,
-  height
+  height,
+  isIphoneX,
+  ifIphoneX,
+  deviceType
 };

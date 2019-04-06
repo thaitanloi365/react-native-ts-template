@@ -1,79 +1,78 @@
-import React from "react";
-import Grid from "../Layout/Grid";
-import { MenuCheckBoxProps, CheckBoxProps } from "Types";
-import { CheckBox } from "Components";
+import React from 'react'
+import Grid from '../Layout/Grid'
+import { MenuCheckBoxProps, CheckBoxProps } from '@Types'
+import { CheckBox } from '@Components'
 
-type Props = MenuCheckBoxProps;
+type Props = MenuCheckBoxProps
 
 type State = {
-  currentIndex: number;
-
-  selectedIndexs: Array<{ index: number; checked: boolean }>;
-};
+  currentIndex: number
+  selectedIndexs: Array<{ index: number; checked: boolean }>
+}
 
 class MenuCheckBox extends React.Component<Props, State> {
-  private checkBoxRefs: Array<CheckBox> = [];
+  private checkBoxRefs: Array<CheckBox> = []
 
   constructor(props: Props) {
-    super(props);
-    const { initialSelectedIndex = 0, children } = props;
-    const length = children.length;
+    super(props)
+    const { initialSelectedIndex = 0, children } = props
+    const length = children.length
     this.state = {
       currentIndex: initialSelectedIndex,
       selectedIndexs: Array.from(Array(length).keys()).map(index => {
         return {
           index,
-          checked: index === 0
-        };
-      })
-    };
+          checked: index === 0,
+        }
+      }),
+    }
   }
 
   static defaultProps: Props = {
     multipleSelect: true,
-    children: []
-  };
+    children: [],
+  }
 
   private onPress = (index: number) => {
-    const { currentIndex } = this.state;
-    const { multipleSelect } = this.props;
-    const checkBox = this.checkBoxRefs[index];
-    if (!checkBox) return;
+    const { currentIndex } = this.state
+    const { multipleSelect } = this.props
+    const checkBox = this.checkBoxRefs[index]
+    if (!checkBox) return
 
     if (multipleSelect) {
       checkBox.toggle(checked => {
-        let temp = [...this.state.selectedIndexs];
-        temp[index].checked = checked;
-        const checkedItems = temp.filter(item => item.checked);
+        let temp = [...this.state.selectedIndexs]
+        temp[index].checked = checked
+        const checkedItems = temp.filter(item => item.checked)
         this.setState({ selectedIndexs: temp }, () => {
-          const { onItemsSelected } = this.props;
+          const { onItemsSelected } = this.props
           if (onItemsSelected) {
-            onItemsSelected(checkedItems);
+            onItemsSelected(checkedItems)
           }
-        });
-      });
+        })
+      })
     } else {
       if (currentIndex === index) {
-        checkBox.toggle();
+        checkBox.toggle()
       } else {
-        const currentCheckBox = this.checkBoxRefs[currentIndex];
+        const currentCheckBox = this.checkBoxRefs[currentIndex]
         if (currentCheckBox) {
           currentCheckBox.toggle(() => {
             this.setState({
-              currentIndex: index
-            });
-          });
+              currentIndex: index,
+            })
+          })
         }
-        checkBox.toggle();
+        checkBox.toggle()
       }
       if (this.props.onItemSelected) {
-        this.props.onItemSelected(index);
+        this.props.onItemSelected(index)
       }
     }
-  };
+  }
 
   render() {
-    const { style, children, numCols, multipleSelect } = this.props;
+    const { style, children, numCols, multipleSelect } = this.props
     if (multipleSelect) {
     }
 
@@ -84,19 +83,19 @@ class MenuCheckBox extends React.Component<Props, State> {
           onPress: () => this.onPress(index),
           // @ts-ignore
           ref: (node: any) => {
-            if (node) this.checkBoxRefs.push(node);
-          }
-        });
+            if (node) this.checkBoxRefs.push(node)
+          },
+        })
       }
 
-      return null;
-    });
+      return null
+    })
     return (
       <Grid style={style} numCols={numCols}>
         {items}
       </Grid>
-    );
+    )
   }
 }
 
-export default MenuCheckBox;
+export default MenuCheckBox

@@ -1,22 +1,22 @@
-import { createStore, applyMiddleware, Store } from "redux";
-import { persistStore } from "redux-persist";
-import { middlewares } from "./Middleware";
-import { initialState, reducer } from "./Reducer";
+import { createStore, applyMiddleware, Store } from 'redux'
+import { persistStore } from 'redux-persist'
+import { middlewares } from './Middleware'
+import { reducer } from './Reducer'
+import { UserProfile, UserToken, AppConfiguration } from '@Models'
 
-export type StoreState = typeof initialState;
+export type StoreState = {
+  userProfile?: UserProfile
+  userToken?: UserToken
+  appConfiguration?: AppConfiguration
+}
 
-const store = createStore(
-  reducer,
-  { appConfiguration: undefined, userStorage: undefined },
-  applyMiddleware(...middlewares)
-);
+const store = createStore(reducer, applyMiddleware(...middlewares))
 
 export const configStore = () => {
-  const persistor = persistStore(store);
-  return { store, persistor };
-};
+  const persistor = persistStore(store)
+  return { store, persistor }
+}
 
 export function getStore(): Store<StoreState> {
-  // @ts-ignore
-  return store;
+  return store
 }

@@ -16,7 +16,7 @@
 // const { Surface, Shape } = ART;
 // import Circle from "../Progress/Shapes/Circle";
 // import Arc from "../Progress/Shapes/Arc";
-// import { Point } from "Types";
+// import { Point } from '@Types';
 
 // type Props = ViewProps & {
 //   radius?: number;

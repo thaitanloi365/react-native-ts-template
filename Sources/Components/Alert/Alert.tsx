@@ -1,99 +1,99 @@
-import React from "react";
-import { View, StyleSheet, Platform, Keyboard, Animated } from "react-native";
-import { AlertProps } from "Types";
-import Assets from "Assets";
-import Text from "../Text/Text";
-import Button from "../Button/Button";
-import AlertBase from "./AlertBase";
+import React from 'react'
+import { View, StyleSheet, Platform, Keyboard, Animated } from 'react-native'
+import { AlertProps } from '@Types'
+import Assets from '@Assets'
+import Text from '../Text/Text'
+import Button from '../Button/Button'
+import AlertBase from './AlertBase'
 
-type Props = AlertProps;
+type Props = AlertProps
 
 type State = {
-  content: string;
-  confirm: boolean;
-  animatedValue: Animated.Value;
-};
+  content: string
+  confirm: boolean
+  animatedValue: Animated.Value
+}
 
 class Alert extends React.Component<Props, State> {
-  private onClose?: () => void;
-  private onOk?: () => void;
-  private onCancel?: () => void;
+  private onClose?: () => void
+  private onOk?: () => void
+  private onCancel?: () => void
 
-  private alertBaseRef = React.createRef<AlertBase>();
+  private alertBaseRef = React.createRef<AlertBase>()
 
   static defaultProps: Props = {
-    positiveButtonText: "OK",
-    negativeButtonText: "Cancel",
+    positiveButtonText: 'OK',
+    negativeButtonText: 'Cancel',
     animationReverse: true,
-    animationType: "scale",
+    animationType: 'scale',
     overlayAnimated: true,
-    overlayDuration: 200
-  };
+    overlayDuration: 200,
+  }
 
   constructor(props: Props) {
-    super(props);
+    super(props)
     this.state = {
-      content: "Are you sure?",
+      content: 'Are you sure?',
       confirm: false,
-      animatedValue: new Animated.Value(0)
-    };
+      animatedValue: new Animated.Value(0),
+    }
   }
 
   show = (msg: string, onClose?: () => void) => {
-    Keyboard.dismiss();
+    Keyboard.dismiss()
     this.setState({ content: msg, confirm: false }, () => {
       if (this.alertBaseRef.current) {
         this.alertBaseRef.current.show(() => {
-          this.onClose = onClose;
-        });
+          this.onClose = onClose
+        })
       }
-    });
-  };
+    })
+  }
 
   confirm = (msg: string, onOk?: () => void, onCancel?: () => void) => {
-    Keyboard.dismiss();
+    Keyboard.dismiss()
     this.setState({ content: msg, confirm: true }, () => {
       if (this.alertBaseRef.current) {
         this.alertBaseRef.current.show(() => {
-          this.onOk = onOk;
-          this.onCancel = onCancel;
-        });
+          this.onOk = onOk
+          this.onCancel = onCancel
+        })
       }
-    });
-  };
+    })
+  }
 
   private hide = (onHide?: () => void) => {
     if (this.alertBaseRef.current) {
-      this.alertBaseRef.current.hide(onHide);
+      this.alertBaseRef.current.hide(onHide)
     }
-  };
+  }
 
   private onOkPressed = () => {
     this.hide(() => {
       if (this.alertBaseRef.current) {
         this.alertBaseRef.current.hide(() => {
           if (this.state.confirm) {
-            if (this.onOk) this.onOk();
+            if (this.onOk) this.onOk()
           } else {
-            if (this.onClose) this.onClose();
+            if (this.onClose) this.onClose()
           }
-        });
+        })
       }
-    });
-  };
+    })
+  }
 
   private onCancelPressed = () => {
     this.hide(() => {
       if (this.alertBaseRef.current) {
         this.alertBaseRef.current.hide(() => {
-          if (this.onCancel) this.onCancel();
-        });
+          if (this.onCancel) this.onCancel()
+        })
       }
-    });
-  };
+    })
+  }
 
   render() {
-    const { content, confirm } = this.state;
+    const { content, confirm } = this.state
     const {
       positiveButtonText,
       positiveButtonStyle,
@@ -102,12 +102,12 @@ class Alert extends React.Component<Props, State> {
       overlayAnimated,
       overlayDuration,
       animationReverse,
-      animationType
-    } = this.props;
+      animationType,
+    } = this.props
 
-    const justifyContent = confirm ? "space-around" : "center";
+    const justifyContent = confirm ? 'space-around' : 'center'
 
-    console.log({ overlayAnimated });
+    console.log({ overlayAnimated })
     return (
       <AlertBase
         ref={this.alertBaseRef}
@@ -134,26 +134,26 @@ class Alert extends React.Component<Props, State> {
           )}
         </View>
       </AlertBase>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     ...Platform.select({
       android: {
-        elevation: 4
+        elevation: 4,
       },
       ios: {
-        shadowColor: "#000000",
+        shadowColor: '#000000',
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.2,
-        shadowRadius: 6
-      }
+        shadowRadius: 6,
+      },
     }),
     borderRadius: 14,
-    maxWidth: "90%"
+    maxWidth: '90%',
   },
   content: {
     marginTop: 16,
@@ -161,14 +161,14 @@ const styles = StyleSheet.create({
     marginBottom: 37,
     fontSize: 18,
     fontFamily: Assets.font.avenir.medium,
-    textAlign: "center",
-    color: Assets.colors.slate
+    textAlign: 'center',
+    color: Assets.colors.slate,
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   okButton: {
     marginHorizontal: 20,
@@ -176,13 +176,13 @@ const styles = StyleSheet.create({
     width: 112,
     borderRadius: 23,
     padding: 0,
-    backgroundColor: Assets.colors.primary
+    backgroundColor: Assets.colors.primary,
   },
   okButtonText: {
     fontSize: 18,
     fontFamily: Assets.font.avenir.medium,
-    color: "white",
-    textAlign: "center"
+    color: 'white',
+    textAlign: 'center',
   },
   cancelButton: {
     marginHorizontal: 20,
@@ -190,13 +190,13 @@ const styles = StyleSheet.create({
     width: 112,
     borderRadius: 23,
     padding: 0,
-    backgroundColor: Assets.colors.blueGrey
+    backgroundColor: Assets.colors.blueGrey,
   },
   cancelButtonText: {
     fontSize: 18,
     fontFamily: Assets.font.avenir.medium,
-    color: "white"
-  }
-});
+    color: 'white',
+  },
+})
 
-export default Alert;
+export default Alert

@@ -1,4 +1,4 @@
-import React from "React";
+import React from 'React'
 import {
   Image,
   View,
@@ -6,74 +6,74 @@ import {
   ImageURISource,
   Animated,
   ImageLoadEventData,
-  NativeSyntheticEvent
-} from "react-native";
+  NativeSyntheticEvent,
+} from 'react-native'
 
-import { AsyncImageProps } from "Types";
-import Assets from "Assets";
-import ActivityIndicator from "../ActivityIndicator/ActivityIndicator";
+import { AsyncImageProps } from '@Types'
+import Assets from '@Assets'
+import Indicator from '../Indicator/Indicator'
 
-type Props = AsyncImageProps;
+type Props = AsyncImageProps
 type State = {
-  width: number;
-  height: number;
-  loading: boolean;
-};
+  width: number
+  height: number
+  loading: boolean
+}
 
 class AsyncImage extends React.Component<Props, State> {
-  private animatedValue = new Animated.Value(0);
+  private animatedValue = new Animated.Value(0)
   constructor(props: Props) {
-    super(props);
+    super(props)
     this.state = {
       width: 0,
       height: 0,
-      loading: true
-    };
+      loading: true,
+    }
   }
 
   static getDerivedStateFromProps(props: Props, state: State) {
     if (props.source) {
-      const { uri = undefined, width, height } = props.source as ImageURISource;
-      if (!uri) return null;
+      const { uri = undefined, width, height } = props.source as ImageURISource
+      if (!uri) return null
       if (width && height) {
-        return { width, height, loading: false };
+        return { width, height, loading: false }
       }
       Image.getSize(
         uri,
         (width, height) => {
-          return { width, height, loading: false };
+          return { width, height, loading: false }
         },
         error => {
-          return { loading: false };
+          return { loading: false }
         }
-      );
+      )
 
       return {
-        loading: true
-      };
+        loading: true,
+      }
     }
 
-    return null;
+    return null
   }
 
   onLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {
-    const { width, height } = event.nativeEvent.source;
+    const { width, height } = event.nativeEvent.source
     this.setState({ width, height, loading: false }, () => {
       Animated.timing(this.animatedValue, {
         toValue: 1,
         duration: 350,
-        useNativeDriver: true
-      }).start();
-    });
-  };
+        useNativeDriver: true,
+      }).start()
+    })
+  }
 
   render() {
-    const { width, height, loading } = this.state;
-    if (width == 0 || height == 0) return null;
-    const { style, source } = this.props;
+    const { width, height, loading } = this.state
+    if (width == 0 || height == 0) return null
+    const { style, source } = this.props
     const animationStyle = {
-      opacity: this.animatedValue
-    };
+      opacity: this.animatedValue,
+    }
     return (
       <View style={[styles.container, style]}>
         <Animated.Image
@@ -82,9 +82,9 @@ class AsyncImage extends React.Component<Props, State> {
           source={source}
           resizeMode="contain"
         />
-        {loading && <ActivityIndicator />}
+        {loading && <Indicator type="Bar" />}
       </View>
-    );
+    )
   }
 }
 
@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     padding: 5,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    width: "100%",
-    height: "100%"
-  }
-});
-export default AsyncImage;
+    width: '100%',
+    height: '100%',
+  },
+})
+export default AsyncImage

@@ -13,27 +13,30 @@ const images = {
   profile: require("./Images/profile.png"),
   changePassword: require("./Images/changePassword.png"),
   checkBoxUncheck: require("./Images/checkBoxUncheck.png"),
-  checkBoxChecked: require("./Images/checkBoxChecked.png")
+  checkBoxChecked: require("./Images/checkBoxChecked.png"),
+  toastError: require("./Images/toastError.png"),
+  toastCancel: require("./Images/toastCancel.png"),
+  toastWarn: require("./Images/toastWarn.png"),
+  toastInfo: require("./Images/toastInfo.png"),
+  toastSuccess: require("./Images/toastSuccess.png")
 };
 
 const colors = {
   primary: "#5b8929",
+  gray: "#8e8e93",
   primaryDark: "#429321",
-  secondary: "#7bbb49",
+  blue: "#007aff",
   slate: "#474f61",
-  orange: "#f76e1e",
+  orange: "#ff9500",
+  orange1: "#ff3b30",
   white: "#ffffff",
-  lightBlueGrey: "#dae4f2",
-  turtleGreen: "#7bbb49",
-  mossyGreen: "#5b8929",
-  treeGreen: "#429321",
-  warmBlue: "#3c5bd2",
-  brownishOrange: "#cc8529",
+  black: "#000000",
   blueGrey: "#78849e",
-  oceanBlue: "#005db0",
-  error: "#cc0000",
-  warn: "#ffbb33",
-  danger: "#ff4444"
+  lightBlueGrey: "#dae4f2",
+  warn: "#cd853f",
+  error: "#cc3232",
+  info: "#2B73B6",
+  success: "#32A54A"
 };
 
 const font = {

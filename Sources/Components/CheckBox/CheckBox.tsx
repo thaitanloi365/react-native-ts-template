@@ -1,87 +1,87 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { CheckBoxProps } from "Types";
-import Assets from "Assets";
-import Icon from "../Icon/Icon";
-import Row from "../Layout/Row";
-import Text from "../Text/Text";
+import React from 'react'
+import { StyleSheet } from 'react-native'
+import { CheckBoxProps } from '@Types'
+import Assets from '@Assets'
+import Icon from '../Icon/Icon'
+import Row from '../Layout/Row'
+import Text from '../Text/Text'
 
-type Props = CheckBoxProps;
+type Props = CheckBoxProps
 
 type State = {
-  checked: boolean;
-};
+  checked: boolean
+}
 
 class CheckBox extends React.Component<Props, State> {
   constructor(props: Props) {
-    super(props);
-    const { checked = false } = props;
+    super(props)
+    const { checked = false } = props
     this.state = {
-      checked
-    };
+      checked,
+    }
   }
 
   static defaultProps: Props = {
-    textPosition: "right"
-  };
+    textPosition: 'right',
+  }
 
   toggle = (onDidToggle?: (checked: boolean) => void) => {
-    const { checked } = this.state;
-    const newState = !checked;
+    const { checked } = this.state
+    const newState = !checked
     this.setState({ checked: newState }, () => {
       if (this.props.onStateChanged) {
-        this.props.onStateChanged(newState);
+        this.props.onStateChanged(newState)
       }
       if (onDidToggle) {
-        onDidToggle(newState);
+        onDidToggle(newState)
       }
-    });
-  };
+    })
+  }
 
   private onPress = () => {
-    const { onPress } = this.props;
+    const { onPress } = this.props
     if (onPress) {
-      onPress();
+      onPress()
     } else {
-      this.toggle();
+      this.toggle()
     }
-  };
+  }
 
   private renderTextLeft = () => {
-    const { textPosition, text } = this.props;
-    if (textPosition !== "left" || text === undefined) return null;
-    const { deactiveTextStyle, activeTextStyle } = this.props;
-    const checked = this.state.checked;
-    const style = checked ? activeTextStyle : deactiveTextStyle;
+    const { textPosition, text } = this.props
+    if (textPosition !== 'left' || text === undefined) return null
+    const { deactiveTextStyle, activeTextStyle } = this.props
+    const checked = this.state.checked
+    const style = checked ? activeTextStyle : deactiveTextStyle
 
-    return <Text style={[styles.text, style]} text={text} />;
-  };
+    return <Text style={[styles.text, style]} text={text} />
+  }
 
   private renderTextRight = () => {
-    const { textPosition, text } = this.props;
-    if (textPosition !== "right" || text === undefined) return null;
-    const { deactiveTextStyle, activeTextStyle } = this.props;
-    const checked = this.state.checked;
-    const style = checked ? activeTextStyle : deactiveTextStyle;
+    const { textPosition, text } = this.props
+    if (textPosition !== 'right' || text === undefined) return null
+    const { deactiveTextStyle, activeTextStyle } = this.props
+    const checked = this.state.checked
+    const style = checked ? activeTextStyle : deactiveTextStyle
 
-    return <Text style={[styles.text, style]} text={text} />;
-  };
+    return <Text style={[styles.text, style]} text={text} />
+  }
 
   render() {
-    const { checked } = this.state;
+    const { checked } = this.state
     const {
       style,
-      activeTintColor = Assets.colors.danger,
+      activeTintColor = Assets.colors.error,
       activeImageSource = Assets.images.checkBoxChecked,
       activeImageStyle,
-      deactiveTintColor = Assets.colors.danger,
+      deactiveTintColor = Assets.colors.error,
       deactiveImageSource = Assets.images.checkBoxUncheck,
       deactiveImageStyle,
-      hitSlop = { top: 10, left: 10, right: 10, bottom: 10 }
-    } = this.props;
-    const source = checked ? activeImageSource : deactiveImageSource;
-    const tintColor = checked ? activeTintColor : deactiveTintColor;
-    const iconStyle = checked ? activeImageStyle : deactiveImageStyle;
+      hitSlop = { top: 10, left: 10, right: 10, bottom: 10 },
+    } = this.props
+    const source = checked ? activeImageSource : deactiveImageSource
+    const tintColor = checked ? activeTintColor : deactiveTintColor
+    const iconStyle = checked ? activeImageStyle : deactiveImageStyle
 
     return (
       <Row alignVertical="center" style={style}>
@@ -95,7 +95,7 @@ class CheckBox extends React.Component<Props, State> {
         />
         {this.renderTextRight()}
       </Row>
-    );
+    )
   }
 }
 
@@ -104,14 +104,14 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   text: {
     fontSize: 16,
     fontFamily: Assets.font.avenir.medium,
-    color: "black"
-  }
-});
+    color: 'black',
+  },
+})
 
-export default CheckBox;
+export default CheckBox

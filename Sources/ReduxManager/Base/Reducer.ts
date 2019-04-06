@@ -1,14 +1,20 @@
-import { combineReducers } from "redux";
+import { reducer as appConfigReducer } from '../AppConfigRedux'
+import { reducer as userTokenReducer } from '../UserTokenRedux'
+import { reducer as userProfileReducer } from '../UserProfileRedux'
+import { persistReducer } from 'redux-persist'
+import { AsyncStorage } from 'react-native'
+import { combineReducers } from 'redux'
 
-import UserStorageReducer from "../UserStorage/UserStorageReducer";
-import AppConfigurationReducer from "../AppConfiguration/AppConfigurationReducer";
+const reducers = combineReducers<any>({
+  userProfile: userTokenReducer,
+  userToken: userProfileReducer,
+  appConfiguration: appConfigReducer,
+})
 
-export const initialState = {
-  userStorage: UserStorageReducer.initialState,
-  appConfiguration: AppConfigurationReducer.initialState
-};
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  blacklist: ['userToken'],
+}
 
-export const reducer = combineReducers({
-  userStorage: UserStorageReducer.reducer,
-  appConfiguration: AppConfigurationReducer.reducer
-});
+export const reducer = persistReducer(persistConfig, reducers)

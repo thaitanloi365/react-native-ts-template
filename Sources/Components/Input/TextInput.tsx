@@ -1,91 +1,93 @@
-import React from "react";
+import React from 'react'
 import {
   View,
   TextInput as RNTextInput,
   Platform,
   StyleSheet,
-  GestureResponderEvent
-} from "react-native";
-import { TextInputProps } from "Types";
-import Text from "../Text/Text";
-import Assets from "Assets";
+  GestureResponderEvent,
+} from 'react-native'
+import { TextInputProps } from '@Types'
+import Text from '../Text/Text'
+import Assets from '@Assets'
 
-type Props = TextInputProps;
+type Props = TextInputProps
 
 type State = {
-  text: string;
-};
+  text: string
+}
 
 class TextInput extends React.Component<Props, State> {
-  private textInputRef = React.createRef<RNTextInput>();
+  private textInputRef = React.createRef<RNTextInput>()
 
   constructor(props: Props) {
-    super(props);
+    super(props)
     this.state = {
-      text: props.defaultValue || ""
-    };
+      text: props.defaultValue || '',
+    }
   }
 
   setNativeProps = (props: object) => {
     if (this.textInputRef.current) {
-      this.textInputRef.current.setNativeProps(props);
+      this.textInputRef.current.setNativeProps(props)
     }
-  };
+  }
+
+  blur = () => {
+    if (this.textInputRef.current) this.textInputRef.current.blur()
+  }
 
   focus = () => {
     if (this.textInputRef.current) {
       if (!this.textInputRef.current.isFocused()) {
-        this.textInputRef.current.focus();
+        this.textInputRef.current.focus()
       }
     }
-  };
+  }
 
   clearText = () => {
-    this.setState({ text: "" }, () => {
-      if (this.textInputRef.current) this.textInputRef.current.clear();
-    });
-  };
+    this.setState({ text: '' }, () => {
+      if (this.textInputRef.current) this.textInputRef.current.clear()
+    })
+  }
 
   getText = () => {
-    return this.state.text;
-  };
+    return this.state.text
+  }
 
   private onTextChanged = (text: string) => {
     this.setState({ text }, () => {
       if (this.props.onChangeText) {
-        this.props.onChangeText(text);
+        this.props.onChangeText(text)
       }
-    });
-  };
+    })
+  }
 
   private renderLeftComponent = () => {
-    const { LeftComponent } = this.props;
-    if (LeftComponent && React.isValidElement(LeftComponent))
-      return LeftComponent;
+    const { LeftComponent } = this.props
+    if (LeftComponent && React.isValidElement(LeftComponent)) return LeftComponent
 
-    if (LeftComponent && typeof LeftComponent === "function") {
-      const c: Function = LeftComponent;
-      return c();
+    if (LeftComponent && typeof LeftComponent === 'function') {
+      const c: Function = LeftComponent
+      return c()
     }
-    return null;
-  };
+    return null
+  }
 
   private renderRightComponent = () => {
-    const { RightComponent } = this.props;
-    if (RightComponent && React.isValidElement(RightComponent))
-      return RightComponent;
+    const { RightComponent } = this.props
+    if (RightComponent && React.isValidElement(RightComponent)) return RightComponent
 
-    if (RightComponent && typeof RightComponent === "function") {
-      const c: Function = RightComponent;
-      return c();
+    if (RightComponent && typeof RightComponent === 'function') {
+      const c: Function = RightComponent
+      return c()
     }
-    return null;
-  };
+    return null
+  }
 
   private onStartShouldSetResponder = (e: GestureResponderEvent) => {
-    this.focus();
-    return true;
-  };
+    this.focus()
+    return true
+  }
 
   render() {
     const {
@@ -111,18 +113,16 @@ class TextInput extends React.Component<Props, State> {
       numberOfLines,
       scrollEnabled,
       autoCapitalize,
-      inputContainerStyle
-    } = this.props;
+      inputContainerStyle,
+    } = this.props
 
-    const hiddenUnderline = multiline || underlineWidth == 0;
+    const hiddenUnderline = multiline || underlineWidth == 0
     const underlineStyle = hiddenUnderline
       ? {}
       : {
-          borderBottomColor: underlineWidth
-            ? underlineColor || "black"
-            : undefined,
-          borderBottomWidth: underlineWidth || StyleSheet.hairlineWidth
-        };
+          borderBottomColor: underlineWidth ? underlineColor || 'black' : undefined,
+          borderBottomWidth: underlineWidth || StyleSheet.hairlineWidth,
+        }
 
     const defaultStyle: any = {
       paddingBottom: 4,
@@ -132,15 +132,15 @@ class TextInput extends React.Component<Props, State> {
       ...Platform.select({
         android: {
           paddingVertical: 0,
-          textAlignVertical: multiline ? "top" : "auto"
-        }
-      })
-    };
+          textAlignVertical: multiline ? 'top' : 'auto',
+        },
+      }),
+    }
 
     const inputContainer: any = [
-      { flexDirection: "row", alignItems: "center" },
-      inputContainerStyle
-    ];
+      { flexDirection: 'row', alignItems: 'center' },
+      inputContainerStyle,
+    ]
 
     return (
       <View
@@ -166,7 +166,7 @@ class TextInput extends React.Component<Props, State> {
             onKeyPress={onKeyPress}
             onFocus={onFocus}
             underlineColorAndroid="transparent"
-            autoCapitalize={autoCapitalize || "none"}
+            autoCapitalize={autoCapitalize || 'none'}
             autoCorrect={false}
             editable={editable}
             multiline={multiline}
@@ -176,8 +176,8 @@ class TextInput extends React.Component<Props, State> {
           {this.renderRightComponent()}
         </View>
       </View>
-    );
+    )
   }
 }
 
-export default TextInput;
+export default TextInput
