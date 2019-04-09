@@ -8,5 +8,6 @@
   "react-redux": "latest",
   "redux-persist": "latest",
   "redux-thunk": "latest",
-  "react-native-code-push": "latest"
+  "react-native-code-push": "latest",
+  "react-native-version-number": "latest"
 }
