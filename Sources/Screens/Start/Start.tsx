@@ -1,36 +1,42 @@
-import React from 'react'
-import { Navigator } from '@Navigation'
-import { SplashScreen } from '@Components'
-import { Authentication } from '@Services'
-import RNSplashScreen from 'react-native-splash-screen'
+import React from "react";
+import { View } from "react-native";
+import { Navigator } from "@Navigation";
+import { Authentication } from "@Services";
+import RNSplashScreen from "react-native-splash-screen";
+import { StyleSheet, Text } from "rn-components";
 
 class Start extends React.Component {
-  private timeoutHandler: any
+  private timeoutHandler: any;
 
-  private start = async () => {
-    const success = await Authentication.createSession()
-    RNSplashScreen.hide()
-    if (success) {
-      this.timeoutHandler = setTimeout(() => Navigator.navTo('Home'), 500)
-    } else {
-      this.timeoutHandler = setTimeout(() => Navigator.navTo('Authentication'), 500)
-    }
-  }
+  private start = () => {
+    RNSplashScreen.hide();
+    Authentication.createSession()
+      .then(() => {
+        this.timeoutHandler = setTimeout(() => Navigator.navTo("Home"), 500);
+      })
+      .catch(() => {
+        this.timeoutHandler = setTimeout(() => Navigator.navTo("Authentication"), 500);
+      });
+  };
 
   componentWillMount() {
-    this.start()
+    this.start();
   }
 
   componentWillUnmount() {
     if (this.timeoutHandler) {
-      clearTimeout(this.timeoutHandler)
-      this.timeoutHandler = 0
+      clearTimeout(this.timeoutHandler);
+      this.timeoutHandler = null;
     }
   }
 
   render() {
-    return <SplashScreen />
+    return (
+      <View style={StyleSheet.absoluteFill}>
+        <Text text="Splash screen" />
+      </View>
+    );
   }
 }
 
-export default Start
+export default Start;

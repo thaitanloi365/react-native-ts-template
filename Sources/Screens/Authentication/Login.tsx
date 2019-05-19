@@ -1,99 +1,31 @@
-import React from 'react'
-import { View, Image, StyleSheet } from 'react-native'
-import { InputGroup, Button, TextInput, ScrollView, StatusBar } from '@Components'
-import { Strings } from '@Localization'
-import { Navigator } from '@Navigation'
-import { Authentication } from '@Services'
-import Assets from '@Assets'
-
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { Header, Button } from "rn-components";
+import { Navigator } from "@Navigation";
 class Login extends React.Component {
-  private inputsRef = React.createRef<InputGroup>()
-
-  private onLogin = () => {
-    const inputsRef = this.inputsRef.current
-    if (!inputsRef) return
-    const [username = '', password = ''] = inputsRef.getAllText()
-    if (username === '') {
-      Navigator.alertShow(Strings.missingUsername, () => inputsRef.focus(0))
-      return
-    }
-
-    if (password === '') {
-      Navigator.alertShow(Strings.missingPassword, () => inputsRef.focus(1))
-      return
-    }
-
-    Navigator.showLoading(Strings.authorizing)
-    Authentication.loginAndCreateSession(username, password)
-      .then(role => {
-        Navigator.hideLoading(() => Navigator.navTo('Home'))
-      })
-      .catch(error => {
-        Navigator.hideLoading(() => Navigator.alertShow(Strings.loginFail))
-      })
-  }
-
   render() {
     return (
       <View style={StyleSheet.absoluteFill}>
-        <StatusBar />
-        <ScrollView style={{ flex: 1 }}>
-          <View style={styles.container}>
-            <InputGroup ref={this.inputsRef} spacing={20} onInputSubmit={this.onLogin}>
-              <TextInput
-                underlineWidth={1}
-                inputStyle={styles.input}
-                helperStyle={styles.helperText}
-                helperText={Strings.username}
-                LeftComponent={<Image style={styles.leftImage} source={Assets.images.username} />}
-              />
-              <TextInput
-                underlineWidth={1}
-                inputStyle={styles.input}
-                helperStyle={styles.helperText}
-                helperText={Strings.password}
-                secureTextEntry={true}
-                LeftComponent={<Image style={styles.leftImage} source={Assets.images.password} />}
-              />
-            </InputGroup>
-            <Button
-              text={Strings.login}
-              style={styles.buttonLogin}
-              buttonStyle={{ paddingVertical: 10 }}
-              onPress={this.onLogin}
-            />
-          </View>
-        </ScrollView>
+        <Header title="Login Page" />
+        <Button
+          text="Show toast"
+          onPress={() => Navigator.showToast("This is a header", "This is a message", "Error")}
+        />
+        <Button
+          text="Show alert confirm"
+          onPress={() => Navigator.showAlert("", "This is a message", () => {}, () => {})}
+        />
+        <Button text="Show alert" onPress={() => Navigator.showAlert("", "This is a message")} />
+        <Button
+          text="Show loading"
+          onPress={() => {
+            Navigator.showLoading();
+            setTimeout(() => Navigator.hideLoading(), 3000);
+          }}
+        />
       </View>
-    )
+    );
   }
 }
 
-const styles = StyleSheet.create({
-  helperText: {
-    marginLeft: 53,
-    marginBottom: 7,
-    fontSize: 13,
-    fontFamily: Assets.font.avenir.mediumOblique,
-    color: Assets.colors.slate,
-  },
-  container: {
-    marginTop: 120,
-    marginLeft: 60,
-    marginRight: 60,
-  },
-  buttonLogin: {
-    marginTop: 40,
-  },
-  leftImage: {
-    marginLeft: 17,
-    marginBottom: 8,
-  },
-  input: {
-    fontSize: 17,
-    fontFamily: Assets.font.avenir.medium,
-    color: Assets.colors.slate,
-    marginLeft: 20,
-  },
-})
-export default Login
+export default Login;

@@ -1,25 +1,67 @@
-import { UserTokenRedux } from '@ReduxManager'
-import { UserToken } from '@Models'
-import Api from '../Api/Api'
+import Api from "../Api/Api";
+import Network from "../Network/Network";
+import { UserToken, UserProfile } from "@Models";
+import { getStore, UserTokenActions, UserProfileActions } from "@ReduxManager";
 
-async function logout() {
-  UserTokenRedux.deleteUserToken()
+function logout(): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    UserTokenActions.deleteUserToken();
+    resolve(true);
+  });
 }
 
-async function loginAndCreateSession(username: string, password: string) {}
+function loginAndCreateSession(email: string, password: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    Api.login<UserToken>(email, password)
+      .then(response => {
+        const { access_token } = response;
 
-async function createSession(token?: string) {
-  try {
-    // @ts-ignore
-    UserTokenRedux.saveUserToken({ access_token: '111', errors: 'sss', message: 'sss' })
-    return await Api.login<UserToken>('tst', '1')
-  } catch (error) {
-    return error
-  }
+        Network.setToken(access_token);
+        UserTokenActions.saveUserToken(response);
+        const promises = Promise.all([Api.getProfile<UserProfile>()]);
+
+        return promises;
+      })
+      .then(values => {
+        const [userProfile] = values;
+
+        UserProfileActions.saveUserProfile(userProfile);
+
+        resolve(true);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
+function createSession(): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    const store = getStore();
+    const { userToken } = store.getState();
+
+    if (userToken) {
+      const { access_token } = userToken;
+      Network.setToken(access_token);
+
+      Promise.all([Api.getProfile<UserProfile>()])
+        .then(values => {
+          const [userProfile] = values;
+
+          UserProfileActions.saveUserProfile(userProfile);
+          resolve(true);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    } else {
+      reject("User not logged");
+    }
+  });
 }
 
 export default {
   logout,
   loginAndCreateSession,
-  createSession,
-}
+  createSession
+};

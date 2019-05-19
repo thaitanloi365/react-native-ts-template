@@ -14,20 +14,20 @@ const updatePackageJson = fileName => {
     packageJson.scripts.android = "adb reverse tcp:8081 tcp:8081 & react-native run-android";
     packageJson.scripts.shake = "adb shell input keyevent 82";
     packageJson.scripts.ios = "react-native run-ios";
-    packageJson.scripts.post_version = "react-native-version --increment-build --never-amend";
-    packageJson.scripts.reset_version = "react-native-version --reset-build --set-build 1";
-    packageJson.codepush_release_staging_ios = `appcenter codepush release-react -a ${iosAppName} -d Staging`;
-    packageJson.codepush_release_production_ios = `appcenter codepush release-react -a ${iosAppName} -d Production`;
-    packageJson.codepush_release_staging_android = `appcenter codepush release-react -a ${androidAppName} -d Staging`;
-    packageJson.codepush_release_production_android = `appcenter codepush release-react -a ${androidAppName} -d Production`;
-    packageJson.codepush_add_staging_ios = `appcenter codepush deployment add -a ${iosAppName} Staging`;
-    packageJson.codepush_add_production_ios = `appcenter codepush deployment add -a ${iosAppName} Production`;
-    packageJson.codepush_add_staging_android = `appcenter codepush deployment add -a ${androidAppName} Staging`;
-    packageJson.codepush_add_production_android = `appcenter codepush deployment add -a ${androidAppName} Production`;
-    packageJson.codepush_create_ios = `appcenter apps create -d ThePark-Android -o Android -p React-Native`;
-    packageJson.codepush_create_android = `appcenter apps create -d ThePark-iOS -o iOS -p React-Native`;
-    packageJson.codepush_list_deployment_ios = `appcenter codepush deployment list -a ${iosAppName} -k`;
-    packageJson.codepush_list_deployment_android = `appcenter codepush deployment list -a ${androidAppName} -k`;
+    packageJson.scripts.ps = "react-native-version --increment-build --never-amend";
+    packageJson.scripts.rv = "react-native-version --reset-build --set-build 1";
+    packageJson.cps = `appcenter codepush release-react -a ${iosAppName} -d Staging`;
+    packageJson.cpp = `appcenter codepush release-react -a ${iosAppName} -d Production`;
+    packageJson.acps = `appcenter codepush release-react -a ${androidAppName} -d Staging`;
+    packageJson.acpp = `appcenter codepush release-react -a ${androidAppName} -d Production`;
+    packageJson.cpas = `appcenter codepush deployment add -a ${iosAppName} Staging`;
+    packageJson.cpap = `appcenter codepush deployment add -a ${iosAppName} Production`;
+    packageJson.acpas = `appcenter codepush deployment add -a ${androidAppName} Staging`;
+    packageJson.acpap = `appcenter codepush deployment add -a ${androidAppName} Production`;
+    packageJson.cpc = `appcenter apps create -d ThePark-Android -o Android -p React-Native`;
+    packageJson.acpc = `appcenter apps create -d ThePark-iOS -o iOS -p React-Native`;
+    packageJson.cpl = `appcenter codepush deployment list -a ${iosAppName} -k`;
+    packageJson.acpl = `appcenter codepush deployment list -a ${androidAppName} -k`;
 
     packageJson = Object.assign(packageJson, { rnpm });
     writeFile(fileName, JSON.stringify(packageJson, null, 2));
@@ -113,7 +113,7 @@ exec("yarn tsc", (error, stdout, stderr) => {
 });
 
 console.log("👉👉👉 Reset version to 0.0.1(1) ...");
-exec("yarn reset_version", (error, stdout, stderr) => {
+exec("yarn rv", (error, stdout, stderr) => {
   if (error) {
     console.error(`exec error: ${error}`);
     return;

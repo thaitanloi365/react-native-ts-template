@@ -1,86 +1,91 @@
-import React from 'react'
-import RNSplashScreen from 'react-native-splash-screen'
-import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
-import { configStore } from '@ReduxManager'
-import { Navigator, AppContainer } from '@Navigation'
-import { NetInfo, Loading, Alert, CodePushUpdate, Toast } from '@Components'
-import { StatusBarStyle } from 'react-native'
-import { ToastType } from '@Types'
+import React from "react";
+import RNSplashScreen from "react-native-splash-screen";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { configStore } from "@ReduxManager";
+import { Navigator, AppContainer } from "@Navigation";
+import { StatusBarStyle, StatusBar as RN } from "react-native";
+import { ToastType } from "@Types";
+import { Loading, Alert, Toast, NetInfo } from "rn-notifier";
+import CodePushDialog from "rn-codepush-dialog";
 
-const { store, persistor } = configStore()
+const { store, persistor } = configStore();
 
 export class App extends React.Component {
-  private loadingRef = React.createRef<Loading>()
-  private alertRef = React.createRef<Alert>()
-  private toastRef = React.createRef<Toast>()
+  private loadingRef = React.createRef<Loading>();
+  private alertRef = React.createRef<Alert>();
+  private toastRef = React.createRef<Toast>();
 
   async componentDidMount() {
     if (__DEV__) {
-      RNSplashScreen.hide()
+      RNSplashScreen.hide();
     }
   }
 
   showLoading = (msg?: string) => {
-    if (this.loadingRef.current) this.loadingRef.current.show(msg)
-  }
+    if (this.loadingRef.current) this.loadingRef.current.show(msg);
+  };
 
   hideLoading = (onClose?: () => void) => {
-    if (this.loadingRef.current) this.loadingRef.current.hide(onClose)
-  }
+    if (this.loadingRef.current) this.loadingRef.current.hide(onClose);
+  };
 
-  alertShow = (msg: string, onClose?: () => void) => {
-    if (this.alertRef.current) this.alertRef.current.show(msg, onClose)
-  }
-
-  alertConfirm = (msg: string, onOk?: () => void, onCancel?: () => void) => {
-    if (this.alertRef.current) this.alertRef.current.confirm(msg, onOk, onCancel)
-  }
+  showAlert = (title: string, msg: string, onOk?: () => void, onCancel?: () => void) => {
+    if (this.alertRef.current) this.alertRef.current.show(title, msg, onOk, onCancel);
+  };
 
   showToast = (
     title: string,
     message: string,
-    type: ToastType = 'Info',
-    duration: number = 1000,
-    activeStatusBarType: StatusBarStyle = 'light-content',
-    deactiveStatusBarType: StatusBarStyle = 'dark-content'
+    type: ToastType = "Error",
+    duration: number = 4000,
+    onShow?: () => void,
+    onClose?: () => void,
+    activeStatusBarType: StatusBarStyle = "light-content",
+    deactiveStatusBarType: StatusBarStyle = "default"
   ) => {
     if (this.toastRef.current) {
+      // @ts-ignore
+      const backupProps = RN._currentValues;
+      let _deactiveStatusBarType = deactiveStatusBarType;
+      if (backupProps && backupProps.barStyle) {
+        const { value } = backupProps.barStyle;
+        if (value) {
+          _deactiveStatusBarType = value;
+        }
+      }
       this.toastRef.current.show(
         title,
         message,
         type,
         duration,
+        onShow,
+        onClose,
         activeStatusBarType,
-        deactiveStatusBarType
-      )
+        _deactiveStatusBarType
+      );
     }
-  }
+  };
 
   hideToast = () => {
     if (this.toastRef.current) {
-      this.toastRef.current.hide()
+      this.toastRef.current.hide();
     }
-  }
+  };
 
   private getScreenProps() {
     return {
       showLoading: this.showLoading,
       hideLoading: this.hideLoading,
-      alertShow: this.alertShow,
-      alertConfirm: this.alertConfirm,
+      showAlert: this.showAlert,
       showToast: this.showToast,
-      hideToast: this.hideToast,
-    }
+      hideToast: this.hideToast
+    };
   }
 
   private setRoot = (r: any) => {
-    Navigator.setRoot(r)
-  }
-
-  // r => {
-  //   Navigator.setRoot(r);
-  // }
+    Navigator.setRoot(r);
+  };
 
   render() {
     return (
@@ -91,11 +96,11 @@ export class App extends React.Component {
           <Loading ref={this.loadingRef} />
           <Alert ref={this.alertRef} />
           <NetInfo />
-          <CodePushUpdate />
+          <CodePushDialog />
         </PersistGate>
       </Provider>
-    )
+    );
   }
 }
 
-export default App
+export default App;
