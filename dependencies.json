@@ -10,7 +10,6 @@
   "redux-thunk": "latest",
   "react-native-code-push": "latest",
   "rn-codepush-dialog": "https://github.com/thaitanloi365/rn-codepush-dialog",
-  "rn-layout": "https://github.com/thaitanloi365/rn-layout",
   "rn-notifier": "https://github.com/thaitanloi365/rn-notifier",
   "rn-components": "https://github.com/thaitanloi365/rn-components"
 }
