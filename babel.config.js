@@ -23,7 +23,7 @@ module.exports = {
           "@Services": "./Sources/Services",
           "@Types": "./Sources/Types",
           "@Utils": "./Sources/Utils",
-          "@Styles": "./Sourecs/Styles"
+          "@Styles": "./Sources/Styles"
         }
       }
     ]

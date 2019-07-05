@@ -30,8 +30,15 @@ export class App extends React.Component {
     if (this.loadingRef.current) this.loadingRef.current.hide(onClose);
   };
 
-  showAlert = (title: string, msg: string, onOk?: () => void, onCancel?: () => void) => {
-    if (this.alertRef.current) this.alertRef.current.show(title, msg, onOk, onCancel);
+  showAlert = (
+    title: string,
+    msg: string,
+    onOk?: () => void,
+    onCancel?: () => void,
+    okButtonText?: string,
+    cancelButtonText?: string
+  ) => {
+    if (this.alertRef.current) this.alertRef.current.show(title, msg, onOk, onCancel, okButtonText, cancelButtonText);
   };
 
   showToast = (
@@ -41,6 +48,7 @@ export class App extends React.Component {
     duration: number = 4000,
     onShow?: () => void,
     onClose?: () => void,
+    isDisableInteraction = false,
     activeStatusBarType: StatusBarStyle = "light-content",
     deactiveStatusBarType: StatusBarStyle = "default"
   ) => {
@@ -61,6 +69,7 @@ export class App extends React.Component {
         duration,
         onShow,
         onClose,
+        isDisableInteraction,
         activeStatusBarType,
         _deactiveStatusBarType
       );
