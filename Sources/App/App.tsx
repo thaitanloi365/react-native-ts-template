@@ -46,6 +46,11 @@ export class App extends React.Component<Props, State> {
   private toastRef = React.createRef<Toast>();
   private checkUpdateTimer = null;
 
+  constructor(props: Props) {
+    super(props);
+    this.state = { checkedUpdate: false };
+  }
+
   componentWillMount() {
     this.checkStore();
     CodePush.disallowRestart();
