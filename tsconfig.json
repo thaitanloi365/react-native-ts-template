@@ -10,6 +10,8 @@
     "strict": true,
     "target": "esnext",
     "baseUrl": ".",
+    "strictNullChecks": false,
+    "noImplicitAny": false,
     "paths": {
       "@App": ["Sources/App"],
       "@Assets": ["Sources/Assets"],

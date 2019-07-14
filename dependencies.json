@@ -9,7 +9,7 @@
   "redux-persist": "latest",
   "redux-thunk": "latest",
   "react-native-code-push": "latest",
-  "rn-codepush-dialog": "https://github.com/thaitanloi365/rn-codepush-dialog",
+  "react-native-version-check": "latest",
   "rn-notifier": "https://github.com/thaitanloi365/rn-notifier",
   "rn-components": "https://github.com/thaitanloi365/rn-components"
 }

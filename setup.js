@@ -7,14 +7,14 @@ const androidAppName = `thaitanloi365/${name}-Android`;
 const updatePackageJson = fileName => {
   try {
     let packageJson = require(path.resolve(__dirname, fileName));
-    const rnpm = {
-      assets: ["Sources/Assets/Fonts"]
-    };
+
     packageJson.scripts.tsc = "tsc";
-    packageJson.scripts.android = "adb reverse tcp:8081 tcp:8081 & react-native run-android";
+    packageJson.scripts.android =
+      "adb reverse tcp:8081 tcp:8081 & react-native run-android";
     packageJson.scripts.shake = "adb shell input keyevent 82";
     packageJson.scripts.ios = "react-native run-ios";
-    packageJson.scripts.ps = "react-native-version --increment-build --never-amend";
+    packageJson.scripts.ps =
+      "react-native-version --increment-build --never-amend";
     packageJson.scripts.rv = "react-native-version --reset-build --set-build 1";
     packageJson.scripts.cps = `appcenter codepush release-react -a ${iosAppName} -d Staging`;
     packageJson.scripts.cpp = `appcenter codepush release-react -a ${iosAppName} -d Production`;
@@ -29,7 +29,7 @@ const updatePackageJson = fileName => {
     packageJson.scripts.cpl = `appcenter codepush deployment list -a ${iosAppName} -k`;
     packageJson.scripts.acpl = `appcenter codepush deployment list -a ${androidAppName} -k`;
 
-    packageJson = Object.assign(packageJson, { rnpm });
+    packageJson = Object.assign(packageJson);
     writeFile(fileName, JSON.stringify(packageJson, null, 2));
     console.log("update package json success");
   } catch (e) {
@@ -45,7 +45,8 @@ const deleteFile = fileName => {
   }
 };
 
-const writeFile = (fileName, data) => fs.writeFileSync(path.join(__dirname, fileName), data);
+const writeFile = (fileName, data) =>
+  fs.writeFileSync(path.join(__dirname, fileName), data);
 
 const moveFile = (oldPath, newPath) => {
   fs.rename(oldPath, newPath, function(err) {
@@ -94,7 +95,10 @@ deleteFile(".flowconfig");
 deleteFile("App.js");
 deleteFile("setup.js");
 deleteFile("README.md");
-moveFile(path.join(__dirname, "app.json"), path.join(__dirname, "Sources/App/app.json"));
+moveFile(
+  path.join(__dirname, "app.json"),
+  path.join(__dirname, "Sources/App/app.json")
+);
 
 updatePackageJson("package.json");
 splashscreen.install();
