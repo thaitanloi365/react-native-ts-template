@@ -68,7 +68,11 @@ export class App extends React.Component<Props, State> {
     VersionCheck.needUpdate()
       .then(res => {
         info = res;
-        return VersionCheck.getStoreUrl({ appID, appName, ignoreErrors: true });
+        return VersionCheck.getStoreUrl({
+          appID: APP_ID,
+          appName: APP_NAME,
+          ignoreErrors: true
+        });
       })
       .then(url => {
         if (!info.isNeeded || !url)
@@ -227,5 +231,5 @@ export default CodePush({
   checkFrequency: CodePush.CheckFrequency.ON_APP_START,
   installMode: CodePush.InstallMode.IMMEDIATE,
   mandatoryInstallMode: CodePush.InstallMode.IMMEDIATE,
-  deploymentKey
+  deploymentKey: DEPLOYMENT_KEY
 })(App);
