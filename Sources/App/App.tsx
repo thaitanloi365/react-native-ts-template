@@ -25,7 +25,7 @@ const ANDROID_STAGING_KEY = "mooSDY5Cm41X07gKGjA0KAece452BkYns-4AV";
 const STAGING_KEY =
   Platform.OS === "ios" ? IOS_STAGING_KEY : ANDROID_STAGING_KEY;
 
-const PROD_KEY = Platform.OS === "ios" ? IOS_PROD_KEY : ANDROID_STAGING_KEY;
+const PROD_KEY = Platform.OS === "ios" ? IOS_PROD_KEY : ANDROID_PROD_KEY;
 
 const DEPLOYMENT_KEY = __DEV__ ? STAGING_KEY : PROD_KEY;
 
