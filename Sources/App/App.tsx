@@ -32,6 +32,8 @@ const DEPLOYMENT_KEY = __DEV__ ? STAGING_KEY : PROD_KEY;
 const APP_ID = "";
 const APP_NAME = "";
 
+const CHECK_UPDATE_TIMEOUT = 20000;
+
 type Props = {};
 
 type State = {
@@ -42,6 +44,7 @@ export class App extends React.Component<Props, State> {
   private loadingRef = React.createRef<Loading>();
   private alertRef = React.createRef<Alert>();
   private toastRef = React.createRef<Toast>();
+  private checkUpdateTimer = null;
 
   componentWillMount() {
     this.checkStore();
@@ -60,6 +63,10 @@ export class App extends React.Component<Props, State> {
 
   componentDidMount() {
     CodePush.allowRestart();
+  }
+
+  componentWillUnmount() {
+    this.checkUpdateTimer && clearTimeout(this.checkUpdateTimer);
   }
 
   checkStore() {
@@ -102,6 +109,11 @@ export class App extends React.Component<Props, State> {
     switch (status) {
       case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
         console.log("Checking for updates.");
+        this.checkUpdateTimer = setTimeout(() => {
+          if (!this.state.checkedUpdate) {
+            this.setState({ checkedUpdate: true });
+          }
+        }, CHECK_UPDATE_TIMEOUT);
         break;
       case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
         console.log("Downloading package.");
