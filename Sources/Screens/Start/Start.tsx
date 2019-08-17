@@ -4,7 +4,7 @@ import { Navigator } from "@Navigation";
 import { Authentication } from "@Services";
 import RNSplashScreen from "react-native-splash-screen";
 import { StyleSheet, Text } from "rn-components";
-
+import RNHelper from "react-native-helper";
 class Start extends React.Component {
   private timeoutHandler: any;
 
@@ -19,10 +19,6 @@ class Start extends React.Component {
       });
   };
 
-  componentWillMount() {
-    this.start();
-  }
-
   componentWillUnmount() {
     if (this.timeoutHandler) {
       clearTimeout(this.timeoutHandler);
@@ -30,10 +26,16 @@ class Start extends React.Component {
     }
   }
 
+  private onDidCheck = result => {
+    console.log("**** onDidCheck", result);
+    this.start();
+  };
+
   render() {
     return (
       <View style={StyleSheet.absoluteFill}>
         <Text text="Splash screen" />
+        <RNHelper onDidCheck={this.onDidCheck} />
       </View>
     );
   }

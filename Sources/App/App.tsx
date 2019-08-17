@@ -6,8 +6,7 @@ import { configStore } from "@ReduxManager";
 import { Navigator, AppContainer } from "@Navigation";
 import { StatusBarStyle, StatusBar as RN } from "react-native";
 import { ToastType } from "@Types";
-import { Loading, Alert, Toast, NetInfo } from "rn-notifier";
-import CodePushDialog from "rn-codepush-dialog";
+import { Loading, Alert, Toast, NetInfo } from "react-native-base";
 
 const { store, persistor } = configStore();
 
@@ -105,7 +104,6 @@ export class App extends React.Component {
           <Loading ref={this.loadingRef} />
           <Alert ref={this.alertRef} />
           <NetInfo />
-          <CodePushDialog />
         </PersistGate>
       </Provider>
     );

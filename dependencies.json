@@ -10,7 +10,6 @@
   "redux-thunk": "latest",
   "react-native-code-push": "latest",
   "react-native-version-check": "latest",
-  "rn-notifier": "thaitanloi365/rn-notifier",
-  "rn-components": "thaitanloi365/rn-components",
-  "rn-codepush-dialog": "thaitanloi365/rn-codepush-dialog"
+  "react-native-base": "thaitanloi365/react-native-base",
+  "react-native-helper": "thaitanloi365/react-native-helper"
 }

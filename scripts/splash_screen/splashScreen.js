@@ -13,7 +13,7 @@ function install() {
     }
     let result = data.replace(
       "return YES;",
-      "[RNSplashScreen show];\n\treturn YES;"
+      '[RNSplashScreen showSplash:@"LaunchScreen" inRootView:rootViewController.view];'
     );
     result = result.replace(
       "#import <React/RCTRootView.h>",
@@ -45,10 +45,7 @@ function install() {
   //   });
   // });
 
-  const android_manifest_dir = path.join(
-    rootDir,
-    `android/app/src/main/AndroidManifest.xml`
-  );
+  const android_manifest_dir = path.join(rootDir, `android/app/src/main/AndroidManifest.xml`);
   fs.readFile(android_manifest_dir, "utf8", function(err, data) {
     if (err) {
       return console.error(err);
@@ -57,10 +54,7 @@ function install() {
       '<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>',
       '<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>\n\t<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>'
     );
-    result = result.replace(
-      'android:windowSoftInputMode="adjustResize"',
-      'android:windowSoftInputMode="adjustPan"'
-    );
+    result = result.replace('android:windowSoftInputMode="adjustResize"', 'android:windowSoftInputMode="adjustPan"');
 
     fs.writeFile(android_manifest_dir, result, "utf8", function(err) {
       if (err) return console.error(err);
@@ -116,10 +110,7 @@ function install() {
   }
 
   console.log({ drawable_dir, layout_dir, src_drawable_dir, src_layout_dir });
-  const mainActivity_file = path.join(
-    rootDir,
-    `android/app/src/main/java/com/${name.toLowerCase()}/MainActivity.java`
-  );
+  const mainActivity_file = path.join(rootDir, `android/app/src/main/java/com/${name.toLowerCase()}/MainActivity.java`);
   const mainActivity_src_file = path.join(__dirname, "MainActivity.java");
   copyFileSync(src_layout_dir, layout_dir);
   copyFolderRecursiveSync(src_drawable_dir, drawable_dir);
@@ -128,10 +119,7 @@ function install() {
     if (err) {
       return console.error(err);
     }
-    let result = data.replace(
-      "package com.wejelly.nedbarcode;",
-      `package com.${name.toLowerCase()};`
-    );
+    let result = data.replace("package com.wejelly.nedbarcode;", `package com.${name.toLowerCase()};`);
     result = result.replace('return "NedCoffee";', `return "${name}";`);
 
     fs.writeFile(mainActivity_file, result, "utf8", function(err) {
