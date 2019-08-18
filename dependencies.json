@@ -11,5 +11,5 @@
   "react-native-code-push": "latest",
   "react-native-version-check": "latest",
   "react-native-base": "thaitanloi365/react-native-base",
-  "react-native-helper": "thaitanloi365/react-native-helper"
+  "react-native-updater": "thaitanloi365/react-native-updater"
 }
