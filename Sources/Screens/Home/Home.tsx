@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { Header, Button } from "rn-components";
+import { Header, Button } from "react-native-base";
 import { Navigator } from "@Navigation";
 
 class Home extends React.Component {

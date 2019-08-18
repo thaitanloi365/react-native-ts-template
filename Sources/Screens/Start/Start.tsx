@@ -3,8 +3,8 @@ import { View } from "react-native";
 import { Navigator } from "@Navigation";
 import { Authentication } from "@Services";
 import RNSplashScreen from "react-native-splash-screen";
-import { StyleSheet, Text } from "rn-components";
-import RNHelper from "react-native-helper";
+import { StyleSheet, Text } from "react-native-base";
+import RNHelper from "react-native-updater";
 class Start extends React.Component {
   private timeoutHandler: any;
 
