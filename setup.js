@@ -100,8 +100,8 @@ moveFile(path.join(__dirname, 'app.json'), path.join(__dirname, 'Sources/App/app
 
 updatePackageJson('package.json')
 splashscreen.install()
-testflight.install()
 rimraf(path.join(__dirname, 'scripts'))
+testflight.install()
 
 console.log('👉👉👉 Types checking ...')
 
