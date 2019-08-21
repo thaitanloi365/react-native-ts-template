@@ -13,7 +13,7 @@ const updatePackageJson = fileName => {
     packageJson.scripts.android = 'adb reverse tcp:8081 tcp:8081 & react-native run-android'
     packageJson.scripts.shake = 'adb shell input keyevent 82'
     packageJson.scripts.ios = 'react-native run-ios'
-    packageJson.scripts.pretty = 'prettier --write "Sources/**/*.tsx"'
+    packageJson.scripts.pretty = 'prettier --write "Sources/**/*.{ts,js,tsx}"'
     packageJson.scripts.cps = `appcenter codepush release-react -a ${iosAppName} -d Staging`
     packageJson.scripts.cpp = `appcenter codepush release-react -a ${iosAppName} -d Production`
     packageJson.scripts.acps = `appcenter codepush release-react -a ${androidAppName} -d Staging`
