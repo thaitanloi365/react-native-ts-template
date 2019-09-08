@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "description": "Clean and minimalist React Native template & folder structure for a quick start with TypeScript.",
   "author": "Thai Tan Loi",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "prettier": "^1.18.2"
+  }
 }

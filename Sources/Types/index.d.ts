@@ -18,13 +18,9 @@ import {
   StyleSheet,
   FlexAlignType,
   FlatListProps as RNFlatListProps,
-  EasingFunction,
+  EasingFunction
 } from 'react-native'
-import {
-  DrawerItemsProps as RNDrawerProps,
-  NavigationScreenProp,
-  NavigationState,
-} from 'react-navigation'
+import { DrawerItemsProps as RNDrawerProps, NavigationScreenProp, NavigationState } from 'react-navigation'
 import { type } from 'os'
 
 export type Item<T> = {
@@ -151,13 +147,7 @@ export type RowProps = ViewProps & {
   children?: React.ReactElement<GridChildProps>[] | React.ReactNode
   alignSelf?: 'auto' | FlexAlignType
   alignVertical?: FlexAlignType
-  alignHorizontal?:
-    | 'flex-start'
-    | 'flex-end'
-    | 'center'
-    | 'space-between'
-    | 'space-around'
-    | 'space-evenly'
+  alignHorizontal?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
 }
 
 export type ColumnProps = ViewProps & {
@@ -166,13 +156,7 @@ export type ColumnProps = ViewProps & {
   children?: React.ReactElement<GridChildProps>[] | React.ReactNode
   alignSelf?: 'auto' | FlexAlignType
   alignHorizontal?: FlexAlignType
-  alignVertical?:
-    | 'flex-start'
-    | 'flex-end'
-    | 'center'
-    | 'space-between'
-    | 'space-around'
-    | 'space-evenly'
+  alignVertical?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
 }
 
 export type KeyboardSpacerProps = ViewProps & {
@@ -217,10 +201,7 @@ export type MaterialTextInputProps = TextInputProps & {
   placeholderDeactiveColor?: string
 }
 
-type CodeInputExtraProps = Pick<
-  RNTextInputProps,
-  'returnKeyType' | 'secureTextEntry' | 'keyboardType'
->
+type CodeInputExtraProps = Pick<RNTextInputProps, 'returnKeyType' | 'secureTextEntry' | 'keyboardType'>
 export type CodeInputProps = CodeInputExtraProps & {
   style?: StyleProp<ViewStyle>
   fontSize?: number
@@ -415,10 +396,7 @@ export type SolidTabsProps = ViewProps & {
   onItemSelected?: (item: SolidTabItem, index: number) => void
 }
 
-type RNFlatListExtrasProps<ItemT> = Omit<
-  RNFlatListProps<ItemT>,
-  'renderItem' | 'data' | 'onRefresh'
->
+type RNFlatListExtrasProps<ItemT> = Omit<RNFlatListProps<ItemT>, 'renderItem' | 'data' | 'onRefresh'>
 export type FlatListProps<ItemT> = RNFlatListExtrasProps<ItemT> & {
   onItemSelected?: (item: ItemT, index: number) => void
   RenderItem: (item: ItemT, index: number) => JSX.Element

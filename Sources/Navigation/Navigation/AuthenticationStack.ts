@@ -1,6 +1,6 @@
-import { createStackNavigator } from "react-navigation";
-import { Login } from "@Screens";
-import getSlideFromRightTransitionConfig from "./transitionConfig";
+import { createStackNavigator } from 'react-navigation-stack'
+import { Login } from '@Screens'
+import getSlideFromRightTransitionConfig from './transitionConfig'
 
 const AuthenticationStack = createStackNavigator(
   {
@@ -8,11 +8,11 @@ const AuthenticationStack = createStackNavigator(
   },
   {
     transitionConfig: getSlideFromRightTransitionConfig,
-    initialRouteName: "Login",
+    initialRouteName: 'Login',
     defaultNavigationOptions: {
       header: null
     }
   }
-);
+)
 
-export default AuthenticationStack;
+export default AuthenticationStack

@@ -9,19 +9,19 @@ const baseStyles = {
   header: {
     backgroundColor: 'black',
     fontSize: 24,
-    fontFamily: Assets.font.avenir.roman,
+    fontFamily: Assets.font.avenir.roman
   },
   section: {
     backgroundColor: 'black',
     fontSize: 20,
-    fontFamily: Assets.font.avenir.roman,
+    fontFamily: Assets.font.avenir.roman
   },
   content: {
     backgroundColor: 'black',
     fontSize: 16,
-    fontFamily: Assets.font.avenir.roman,
+    fontFamily: Assets.font.avenir.roman
   },
-  center: {},
+  center: {}
 }
 
 function createOnlyStyle(key: keyof typeof baseStyles, overrides = {}) {

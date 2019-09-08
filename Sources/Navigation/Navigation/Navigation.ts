@@ -1,8 +1,9 @@
-import { createStackNavigator, createAppContainer } from "react-navigation";
-import { Start } from "@Screens";
-import AuthenticationStack from "./AuthenticationStack";
-import HomeStack from "./HomeStack";
-import getSlideFromRightTransitionConfig from "./transitionConfig";
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import { Start } from '@Screens'
+import AuthenticationStack from './AuthenticationStack'
+import HomeStack from './HomeStack'
+import getSlideFromRightTransitionConfig from './transitionConfig'
 
 const RootStack = createStackNavigator(
   {
@@ -11,17 +12,17 @@ const RootStack = createStackNavigator(
     Start: Start
   },
   {
-    initialRouteName: "Start",
+    initialRouteName: 'Start',
     transitionConfig: getSlideFromRightTransitionConfig,
-    headerMode: "none",
+    headerMode: 'none',
     defaultNavigationOptions: {
       swipeEnabled: false,
       gesturesEnabled: false,
       header: null
     }
   }
-);
+)
 
-const AppContainer = createAppContainer(RootStack);
+const AppContainer = createAppContainer(RootStack)
 
-export default AppContainer;
+export default AppContainer

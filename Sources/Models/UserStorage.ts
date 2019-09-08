@@ -1,18 +1,18 @@
 export type UserProfile = {
-  name: string;
-};
+  name: string
+}
 
 export type UserDatabase = {
-  data: any;
-};
+  data: any
+}
 
 export type UserToken = {
-  access_token: string;
+  access_token: string
   user_info: Array<{
-    mobi_app_level: string;
-    name: string;
-    email: string;
-  }>;
-  message: string;
-  errors: string;
-};
+    mobi_app_level: string
+    name: string
+    email: string
+  }>
+  message: string
+  errors: string
+}

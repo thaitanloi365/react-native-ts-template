@@ -13,7 +13,7 @@ function install() {
     }
     let result = data.replace(
       'return YES;',
-      '[RNSplashScreen showSplash:@"LaunchScreen" inRootView:rootViewController.view];'
+      '[RNSplashScreen showSplash:@"LaunchScreen" inRootView:rootViewController.view];\nreturn YES;'
     )
     result = result.replace(
       '#import <React/RCTRootView.h>',

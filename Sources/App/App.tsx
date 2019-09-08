@@ -1,33 +1,26 @@
-import React from "react";
-import RNSplashScreen from "react-native-splash-screen";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { configStore } from "@ReduxManager";
-import { Navigator, AppContainer } from "@Navigation";
-import { StatusBarStyle, StatusBar as RN } from "react-native";
-import { ToastType } from "@Types";
-import { Loading, Alert, Toast, NetInfo } from "react-native-base";
+import React from 'react'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { configStore } from '@ReduxManager'
+import { Navigator, AppContainer } from '@Navigation'
+import { StatusBarStyle, StatusBar as RN } from 'react-native'
+import { ToastType } from '@Types'
+import { Loading, Alert, Toast, NetInfo } from 'react-native-base'
 
-const { store, persistor } = configStore();
+const { store, persistor } = configStore()
 
 export class App extends React.Component {
-  private loadingRef = React.createRef<Loading>();
-  private alertRef = React.createRef<Alert>();
-  private toastRef = React.createRef<Toast>();
-
-  async componentDidMount() {
-    if (__DEV__) {
-      RNSplashScreen.hide();
-    }
-  }
+  private loadingRef = React.createRef<Loading>()
+  private alertRef = React.createRef<Alert>()
+  private toastRef = React.createRef<Toast>()
 
   showLoading = (msg?: string) => {
-    if (this.loadingRef.current) this.loadingRef.current.show(msg);
-  };
+    if (this.loadingRef.current) this.loadingRef.current.show(msg)
+  }
 
   hideLoading = (onClose?: () => void) => {
-    if (this.loadingRef.current) this.loadingRef.current.hide(onClose);
-  };
+    if (this.loadingRef.current) this.loadingRef.current.hide(onClose)
+  }
 
   showAlert = (
     title: string,
@@ -37,28 +30,28 @@ export class App extends React.Component {
     okButtonText?: string,
     cancelButtonText?: string
   ) => {
-    if (this.alertRef.current) this.alertRef.current.show(title, msg, onOk, onCancel, okButtonText, cancelButtonText);
-  };
+    if (this.alertRef.current) this.alertRef.current.show(title, msg, onOk, onCancel, okButtonText, cancelButtonText)
+  }
 
   showToast = (
     title: string,
     message: string,
-    type: ToastType = "Error",
+    type: ToastType = 'Error',
     duration: number = 4000,
     onShow?: () => void,
     onClose?: () => void,
     isDisableInteraction = false,
-    activeStatusBarType: StatusBarStyle = "light-content",
-    deactiveStatusBarType: StatusBarStyle = "default"
+    activeStatusBarType: StatusBarStyle = 'light-content',
+    deactiveStatusBarType: StatusBarStyle = 'default'
   ) => {
     if (this.toastRef.current) {
       // @ts-ignore
-      const backupProps = RN._currentValues;
-      let _deactiveStatusBarType = deactiveStatusBarType;
+      const backupProps = RN._currentValues
+      let _deactiveStatusBarType = deactiveStatusBarType
       if (backupProps && backupProps.barStyle) {
-        const { value } = backupProps.barStyle;
+        const { value } = backupProps.barStyle
         if (value) {
-          _deactiveStatusBarType = value;
+          _deactiveStatusBarType = value
         }
       }
       this.toastRef.current.show(
@@ -71,15 +64,15 @@ export class App extends React.Component {
         isDisableInteraction,
         activeStatusBarType,
         _deactiveStatusBarType
-      );
+      )
     }
-  };
+  }
 
   hideToast = () => {
     if (this.toastRef.current) {
-      this.toastRef.current.hide();
+      this.toastRef.current.hide()
     }
-  };
+  }
 
   private getScreenProps() {
     return {
@@ -88,12 +81,12 @@ export class App extends React.Component {
       showAlert: this.showAlert,
       showToast: this.showToast,
       hideToast: this.hideToast
-    };
+    }
   }
 
   private setRoot = (r: any) => {
-    Navigator.setRoot(r);
-  };
+    Navigator.setRoot(r)
+  }
 
   render() {
     return (
@@ -106,8 +99,8 @@ export class App extends React.Component {
           <NetInfo />
         </PersistGate>
       </Provider>
-    );
+    )
   }
 }
 
-export default App;
+export default App

@@ -2,14 +2,12 @@
   "moment": "latest",
   "axios": "latest",
   "react-navigation": "latest",
+  "react-navigation-stack": "latest",
   "react-native-splash-screen": "latest",
   "react-native-gesture-handler": "latest",
   "redux": "latest",
   "react-redux": "latest",
   "redux-persist": "latest",
   "redux-thunk": "latest",
-  "react-native-code-push": "latest",
-  "react-native-version-check": "latest",
-  "react-native-base": "thaitanloi365/react-native-base",
-  "react-native-updater": "thaitanloi365/react-native-updater"
+  "react-native-base": "thaitanloi365/react-native-base"
 }

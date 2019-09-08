@@ -1,14 +1,8 @@
-import {
-  LayoutAnimation,
-  Platform,
-  UIManager,
-  LayoutAnimationConfig
-} from "react-native";
+import { LayoutAnimation, Platform, UIManager, LayoutAnimationConfig } from 'react-native'
 
 function enableAndroidLayoutAnimation() {
-  if (Platform.OS == "android") {
-    UIManager.setLayoutAnimationEnabledExperimental &&
-      UIManager.setLayoutAnimationEnabledExperimental(true);
+  if (Platform.OS == 'android') {
+    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true)
   }
 }
 
@@ -23,7 +17,7 @@ const Keyboard: LayoutAnimationConfig = {
   delete: {
     type: LayoutAnimation.Types.easeInEaseOut
   }
-};
+}
 
 const Toast: LayoutAnimationConfig = {
   duration: 250,
@@ -40,7 +34,7 @@ const Toast: LayoutAnimationConfig = {
     type: LayoutAnimation.Types.easeOut,
     property: LayoutAnimation.Properties.opacity
   }
-};
+}
 
 const ListItem: LayoutAnimationConfig = {
   duration: 250,
@@ -57,22 +51,19 @@ const ListItem: LayoutAnimationConfig = {
     type: LayoutAnimation.Types.easeInEaseOut,
     property: LayoutAnimation.Properties.opacity
   }
-};
+}
 
-function setLayoutAnimation(
-  config?: LayoutAnimationConfig,
-  callback?: () => void
-) {
+function setLayoutAnimation(config?: LayoutAnimationConfig, callback?: () => void) {
   if (config) {
-    LayoutAnimation.configureNext(config, callback);
+    LayoutAnimation.configureNext(config, callback)
   } else {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear, callback);
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.linear, callback)
   }
 }
 
-const PresetEaseInOut = LayoutAnimation.Presets.easeInEaseOut;
-const PresetLinear = LayoutAnimation.Presets.linear;
-const PresetSpring = LayoutAnimation.Presets.spring;
+const PresetEaseInOut = LayoutAnimation.Presets.easeInEaseOut
+const PresetLinear = LayoutAnimation.Presets.linear
+const PresetSpring = LayoutAnimation.Presets.spring
 export default {
   enableAndroidLayoutAnimation,
   setLayoutAnimation,
@@ -82,4 +73,4 @@ export default {
   PresetEaseInOut,
   PresetLinear,
   PresetSpring
-};
+}

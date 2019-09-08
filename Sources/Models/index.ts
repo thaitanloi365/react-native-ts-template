@@ -1,2 +1,2 @@
-export * from "./UserStorage";
-export * from "./AppConfiguration";
+export * from './UserStorage'
+export * from './AppConfiguration'
